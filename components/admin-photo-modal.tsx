@@ -41,12 +41,26 @@ export function AdminPhotoModal({
   if (!isOpen) return null;
 
   const handleAddPhoto = async (url: string, isCover = false) => {
-    if (!url.trim()) return;
+    let raw = url.trim();
+    if (!raw) return;
+
+    // Auto prefix https:// if missing
+    if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
+      raw = 'https://' + raw;
+    }
+
+    try {
+      new URL(raw);
+    } catch {
+      setMsg('Invalid image URL format. Please provide a valid link.');
+      return;
+    }
+
     setIsSubmitting(true);
     setMsg('');
 
     try {
-      const res = await addPhotoToListing(listingId, url.trim(), isCover);
+      const res = await addPhotoToListing(listingId, raw, isCover);
       if (res.success && res.image) {
         setImages((prev) => [
           ...prev,
@@ -55,9 +69,11 @@ export function AdminPhotoModal({
         setUrlInput('');
         setMsg('Photo added successfully!');
         onPhotosUpdated();
+      } else {
+        setMsg(res.error || 'Failed to save photo.');
       }
     } catch {
-      setMsg('Error adding photo.');
+      setMsg('Error adding photo. Please check your connection.');
     } finally {
       setIsSubmitting(false);
     }
@@ -128,6 +144,7 @@ export function AdminPhotoModal({
                       src={img.url}
                       alt="Property photo"
                       fill
+                      unoptimized
                       className="object-cover"
                     />
                     {img.isCover && (
@@ -164,20 +181,26 @@ export function AdminPhotoModal({
             </label>
             <div className="flex gap-2">
               <input
-                type="url"
-                placeholder="https://images.unsplash.com/..."
+                type="text"
+                placeholder="Paste image URL (e.g. https://images.unsplash.com/...)"
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddPhoto(urlInput);
+                  }
+                }}
                 className="flex-1 rounded-xl border border-stone-300 px-3.5 py-2 text-xs text-stone-900 focus:border-emerald-600 focus:outline-none"
               />
               <button
                 type="button"
                 onClick={() => handleAddPhoto(urlInput)}
                 disabled={isSubmitting || !urlInput.trim()}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700 transition disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-700 transition disabled:opacity-50 shrink-0"
               >
                 <Plus className="h-4 w-4" />
-                <span>Add</span>
+                <span>Add URL</span>
               </button>
             </div>
           </div>

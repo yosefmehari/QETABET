@@ -108,11 +108,26 @@ export default function NewListingPage() {
     }
   };
 
-  const handleAddCustomPhoto = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (customPhotoInput.trim()) {
-      setImageUrls((prev) => [...prev, customPhotoInput.trim()]);
+  const handleAddCustomPhoto = (e?: React.FormEvent | React.MouseEvent | React.KeyboardEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    let raw = customPhotoInput.trim();
+    if (!raw) return;
+
+    // Auto prefix https:// if missing
+    if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
+      raw = 'https://' + raw;
+    }
+
+    try {
+      new URL(raw);
+      setImageUrls((prev) => [...prev, raw]);
       setCustomPhotoInput('');
+      setError('');
+    } catch {
+      setError('Please enter a valid image URL (e.g. https://images.unsplash.com/...)');
     }
   };
 
@@ -509,7 +524,7 @@ export default function NewListingPage() {
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {imageUrls.map((url, idx) => (
                   <div key={idx} className="group relative aspect-[4/3] rounded-xl overflow-hidden bg-stone-100 border border-stone-200">
-                    <Image src={url} alt={`Listing photo ${idx + 1}`} fill className="object-cover" />
+                    <Image src={url} alt={`Listing photo ${idx + 1}`} fill unoptimized className="object-cover" />
                     {idx === 0 && (
                       <span className="absolute top-1.5 left-1.5 rounded-md bg-emerald-600 px-1.5 py-0.5 text-[9px] font-bold text-white shadow">
                         Cover Photo
@@ -548,16 +563,23 @@ export default function NewListingPage() {
               {/* Custom URL Input */}
               <div className="flex gap-2">
                 <input
-                  type="url"
-                  placeholder="Paste custom image URL (https://...)"
+                  type="text"
+                  placeholder="Paste custom image URL (e.g. https://images.unsplash.com/...)"
                   value={customPhotoInput}
                   onChange={(e) => setCustomPhotoInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleAddCustomPhoto(e);
+                    }
+                  }}
                   className="flex-1 rounded-xl border border-stone-300 px-3.5 py-2 text-xs text-stone-900 focus:border-emerald-600 focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={handleAddCustomPhoto}
-                  className="inline-flex items-center gap-1 rounded-xl bg-stone-900 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-600 transition"
+                  className="inline-flex items-center gap-1 rounded-xl bg-stone-900 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-600 transition active:scale-95 shrink-0"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   <span>Add URL</span>

@@ -37,6 +37,7 @@ export function ListingGallerySection({ title, images }: ListingGallerySectionPr
               alt={title}
               fill
               priority
+              unoptimized
               sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -54,6 +55,7 @@ export function ListingGallerySection({ title, images }: ListingGallerySectionPr
                 src={img.url}
                 alt={`${title} - Photo ${idx + 2}`}
                 fill
+                unoptimized
                 sizes="25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />

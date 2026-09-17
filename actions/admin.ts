@@ -76,32 +76,42 @@ export async function updateListingStatus(listingId: string, status: ListingStat
 }
 
 export async function addPhotoToListing(listingId: string, url: string, isCover = false) {
-  const currentCount = await prisma.listingImage.count({ where: { listingId } });
-  
-  if (isCover) {
-    await prisma.listingImage.updateMany({
-      where: { listingId },
-      data: { isCover: false },
+  try {
+    const cleanUrl = url.trim();
+    if (!cleanUrl) {
+      return { success: false, error: 'URL cannot be empty' };
+    }
+
+    const currentCount = await prisma.listingImage.count({ where: { listingId } });
+    
+    if (isCover) {
+      await prisma.listingImage.updateMany({
+        where: { listingId },
+        data: { isCover: false },
+      });
+    }
+
+    const image = await prisma.listingImage.create({
+      data: {
+        listingId,
+        url: cleanUrl,
+        isCover: isCover || currentCount === 0,
+        order: currentCount,
+      },
     });
+
+    const listing = await prisma.listing.findUnique({ where: { id: listingId }, select: { slug: true } });
+    if (listing) {
+      revalidatePath('/');
+      revalidatePath('/admin');
+      revalidatePath(`/listings/${listing.slug}`);
+    }
+
+    return { success: true, image };
+  } catch (error: any) {
+    console.error('Failed to add photo to listing:', error);
+    return { success: false, error: error?.message || 'Database error occurred' };
   }
-
-  const image = await prisma.listingImage.create({
-    data: {
-      listingId,
-      url,
-      isCover: isCover || currentCount === 0,
-      order: currentCount,
-    },
-  });
-
-  const listing = await prisma.listing.findUnique({ where: { id: listingId }, select: { slug: true } });
-  if (listing) {
-    revalidatePath('/');
-    revalidatePath('/admin');
-    revalidatePath(`/listings/${listing.slug}`);
-  }
-
-  return { success: true, image };
 }
 
 export async function removePhotoFromListing(imageId: string) {

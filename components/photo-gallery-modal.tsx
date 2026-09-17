@@ -90,6 +90,7 @@ export function PhotoGalleryModal({
             src={images[currentIndex].url}
             alt={`${title} - Photo ${currentIndex + 1}`}
             fill
+            unoptimized
             sizes="100vw"
             priority
             className="object-contain"
@@ -126,6 +127,7 @@ export function PhotoGalleryModal({
                   src={img.url}
                   alt={`Thumbnail ${idx + 1}`}
                   fill
+                  unoptimized
                   className="object-cover"
                 />
               </button>

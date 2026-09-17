@@ -349,7 +349,7 @@ export function AdminDashboardClient({
                         <td className="py-3.5 px-4">
                           <div className="flex items-center gap-3">
                             <div className="relative h-12 w-16 overflow-hidden rounded-lg bg-stone-100 shrink-0 border border-stone-200">
-                              <Image src={coverUrl} alt={l.title} fill className="object-cover" />
+                              <Image src={coverUrl} alt={l.title} fill unoptimized className="object-cover" />
                               <span className="absolute bottom-0 right-0 bg-black/70 px-1 py-0.2 text-[9px] font-bold text-white rounded-tl">
                                 {l.images.length} 📷
                               </span>

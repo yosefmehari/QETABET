@@ -48,15 +48,6 @@ export function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
           <Link
-            href="/admin"
-            className="inline-flex items-center gap-1.5 rounded-xl border border-stone-200/90 bg-stone-50/80 px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-100 hover:text-stone-900 transition active:scale-95 shadow-xs"
-            title="Access Staff Admin Portal"
-          >
-            <Shield className="h-3.5 w-3.5 text-emerald-600" />
-            <span className="hidden sm:inline">Admin</span>
-          </Link>
-
-          <Link
             href="/listings/new"
             className="group inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-700/20 hover:from-emerald-700 hover:to-emerald-800 transition-all duration-200 active:scale-95"
           >

@@ -115,7 +115,7 @@ export function ListingCard({ listing }: ListingCardProps) {
   };
 
   return (
-    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-stone-200/90 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-xl">
+    <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-stone-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:border-emerald-500/60 hover:shadow-xl hover:shadow-emerald-950/5">
       {/* Image Carousel Container */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-stone-100">
         <Link href={`/listings/${listing.slug}`} className="block h-full w-full">

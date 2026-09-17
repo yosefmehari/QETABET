@@ -41,25 +41,25 @@ export function ListingDetailsClient({
   return (
     <div className="sticky top-24 space-y-4">
       {/* Price Card */}
-      <div className="rounded-2xl border border-stone-200 bg-white p-6 shadow-lg space-y-5">
+      <div className="rounded-3xl border border-stone-200/90 bg-white p-7 shadow-xl shadow-stone-900/5 space-y-6">
         <div>
           <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-black text-stone-900">
+            <span className="text-3xl font-black tracking-tight text-stone-900">
               {formatETB(monthlyRent)}
             </span>
             <span className="text-xs font-semibold text-stone-500">per month</span>
           </div>
 
-          <div className="mt-2 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-md bg-stone-100 px-2 py-1 text-stone-600 font-medium">
+          <div className="mt-3 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-lg bg-stone-100 px-2.5 py-1 text-stone-700 font-semibold border border-stone-200/60">
               Deposit: {depositMonths} {depositMonths === 1 ? 'month' : 'months'}
             </span>
             {isPriceNegotiable ? (
-              <span className="rounded-md bg-amber-100 px-2 py-1 text-amber-800 font-semibold">
-                Negotiable with Landlord
+              <span className="rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-1 text-amber-800 font-bold">
+                Negotiable with Owner
               </span>
             ) : (
-              <span className="rounded-md bg-stone-100 px-2 py-1 text-stone-600 font-medium">
+              <span className="rounded-lg bg-stone-100 px-2.5 py-1 text-stone-600 font-medium">
                 Fixed Price
               </span>
             )}
@@ -67,32 +67,34 @@ export function ListingDetailsClient({
         </div>
 
         {/* Delala savings banner */}
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 p-3.5 text-xs text-emerald-950">
-          <div className="flex items-center gap-1.5 font-bold text-emerald-800">
-            <Ban className="h-4 w-4 text-emerald-600" />
+        <div className="rounded-2xl border border-emerald-300/80 bg-gradient-to-br from-emerald-50 to-teal-50/50 p-4 text-xs text-emerald-950 shadow-xs">
+          <div className="flex items-center gap-2 font-black text-emerald-800">
+            <div className="p-1 rounded-full bg-emerald-600 text-white">
+              <Ban className="h-3.5 w-3.5" />
+            </div>
             <span>You Save {formatETB(brokerSavings)}!</span>
           </div>
-          <p className="mt-1 text-[11px] text-emerald-900/80">
-            By renting directly through QetaBet, you avoid paying the standard 1-month broker fee.
+          <p className="mt-1.5 text-[11px] text-emerald-900/80 leading-relaxed">
+            By renting directly on QetaBet, you bypass the standard 1-month broker fee paid to street delalas.
           </p>
         </div>
 
         {/* Primary CTAs */}
-        <div className="space-y-2.5">
+        <div className="space-y-3">
           {/* Direct Phone Call */}
           <a
             href={`tel:${landlordPhone}`}
-            className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 text-xs font-bold text-white shadow hover:bg-emerald-700 transition"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 py-3.5 text-xs font-extrabold text-white shadow-md shadow-emerald-700/20 hover:from-emerald-700 hover:to-emerald-800 transition active:scale-98"
           >
             <Phone className="h-4 w-4" />
-            <span>Call Landlord: {landlordPhone}</span>
+            <span>Call Homeowner: {landlordPhone}</span>
           </a>
 
           {/* Send Inquiry Form */}
           <button
             type="button"
             onClick={() => setIsInquiryOpen(true)}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-stone-300 bg-stone-50 py-3 text-xs font-bold text-stone-800 hover:bg-stone-100 transition"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl border border-stone-300 bg-stone-50/80 py-3.5 text-xs font-bold text-stone-800 hover:bg-stone-100 transition active:scale-98"
           >
             <MessageSquare className="h-4 w-4 text-emerald-700" />
             <span>Send Direct Message / Schedule Visit</span>
@@ -102,7 +104,7 @@ export function ListingDetailsClient({
           <button
             type="button"
             onClick={() => setIsPaymentOpen(true)}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-sky-300 bg-sky-50 py-3 text-xs font-bold text-sky-800 hover:bg-sky-100 transition"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl border border-sky-300/90 bg-sky-50/70 py-3.5 text-xs font-bold text-sky-900 hover:bg-sky-100 transition active:scale-98 shadow-xs"
           >
             <CreditCard className="h-4 w-4 text-sky-600" />
             <span>Reserve via Telebirr or Chapa</span>

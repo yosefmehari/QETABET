@@ -1,7 +1,14 @@
 import type { Metadata } from 'next';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
+
+const fontSans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'QetaBet | Verified Addis Ababa Rentals (0% Broker Fee)',
@@ -25,8 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-stone-50 text-stone-900 antialiased flex flex-col">
+    <html lang="en" className={fontSans.variable}>
+      <body className="min-h-screen bg-[#faf9f6] text-stone-900 antialiased flex flex-col font-sans selection:bg-emerald-600 selection:text-white">
+        {/* Subtle Ethiopian Tricolor Accent Hairline */}
+        <div className="ethiopian-bar sticky top-0 z-50" />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

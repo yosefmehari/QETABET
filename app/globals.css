@@ -3,33 +3,72 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 24, 24, 27;
-  --background-start-rgb: 250, 250, 249;
-  --background-end-rgb: 255, 255, 255;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: #fafaf9;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  -webkit-tap-highlight-color: transparent;
+@layer base {
+  body {
+    background-color: #fcfbf9;
+    color: #1c1917;
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
 }
 
-/* Custom scrollbar */
+/* Glassmorphism utility */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(231, 229, 228, 0.8);
+}
+
+.glass-panel-dark {
+  background: rgba(12, 10, 9, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Subtle Ethiopian tricolor hair-line */
+.ethiopian-bar {
+  background: linear-gradient(90deg, #078930 0%, #078930 33%, #FCDD09 33%, #FCDD09 66%, #DA121A 66%, #DA121A 100%);
+  height: 3px;
+  width: 100%;
+}
+
+/* Custom subtle scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f0;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
+  background: #d6d3d1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: #a8a29e;
+}
+
+/* Smooth selection */
+::selection {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+/* Hide scrollbar for clean horizontal carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ShieldCheck, Droplets, Zap, Ban, CheckCircle } from 'lucide-react';
+import { ShieldCheck, Droplets, Zap, Ban, CheckCircle, Sparkles, Building, Check } from 'lucide-react';
 
 interface HeroBannerProps {
   onQuickFilter: (key: string, value: any) => void;
@@ -15,65 +15,95 @@ export function HeroBanner({
   activeGeneratorFilter,
 }: HeroBannerProps) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-emerald-900 via-emerald-950 to-stone-950 text-white pt-8 pb-12 px-4 sm:px-6 lg:px-8">
-      {/* Subtle background glow */}
-      <div className="absolute top-0 right-1/4 -mt-12 h-64 w-64 rounded-full bg-emerald-500/20 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/3 -mb-12 h-72 w-72 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#092215] via-[#0b291a] to-[#0d1f18] text-white pt-10 pb-14 px-4 sm:px-6 lg:px-8">
+      {/* Aurora radial glows */}
+      <div className="absolute -top-24 left-1/4 h-96 w-96 rounded-full bg-emerald-500/15 blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 right-10 h-80 w-80 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-32 w-3/4 bg-emerald-600/10 blur-2xl pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl">
         {/* Anti-broker / Anti-Telegram badge */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-semibold text-emerald-300 backdrop-blur-md">
+        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-950/60 px-4 py-1.5 text-xs font-bold text-emerald-300 backdrop-blur-md shadow-inner">
           <Ban className="h-3.5 w-3.5 text-rose-400" />
-          <span>No Unofficial Telegram Scams • No Predatory 1-Month Broker Cuts</span>
+          <span>No Telegram Scams • Zero 1-Month Broker Fees (ደላላ የለም)</span>
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-ping" />
         </div>
 
         {/* Heading */}
-        <div className="mt-4 max-w-3xl">
-          <h1 className="text-2xl font-black tracking-tight sm:text-4xl lg:text-5xl text-white">
-            Verified Addis Ababa Rentals{' '}
-            <span className="text-emerald-400 block sm:inline">
+        <div className="mt-5 max-w-3xl">
+          <h1 className="text-3xl font-black tracking-tight sm:text-5xl lg:text-6xl text-white leading-[1.12]">
+            Verified Addis Homes.{' '}
+            <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-amber-300 bg-clip-text text-transparent">
               Direct from Homeowners.
             </span>
           </h1>
-          <p className="mt-3 text-sm text-stone-300 sm:text-base max-w-2xl leading-relaxed">
-            Eliminate ghost listings and fake brokers. Every apartment on QetaBet is physically verified
-            for continuous water tanks (Rotto), standby generator, and true market prices in ETB.
+          <p className="mt-4 text-sm sm:text-base text-stone-300 max-w-2xl leading-relaxed">
+            Eliminate ghost listings and fake brokers. Every property on QetaBet is physically inspected
+            for dedicated water reserve tanks (Rotto), backup power, and fair monthly rent in ETB.
           </p>
         </div>
 
-        {/* Quick Addis Infrastructure Highlights */}
-        <div className="mt-6 flex flex-wrap items-center gap-2.5 sm:gap-3">
+        {/* Quick Addis Infrastructure Filter Triggers */}
+        <div className="mt-8 flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={() => onQuickFilter('hasWaterReserve', !activeWaterFilter)}
-            className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition shadow-sm ${
+            className={`group inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-xs font-bold transition-all duration-200 shadow-md ${
               activeWaterFilter
-                ? 'bg-sky-500 text-white ring-2 ring-sky-300'
-                : 'bg-white/10 text-white hover:bg-white/20 border border-white/15'
+                ? 'bg-sky-500 text-white ring-2 ring-sky-300 shadow-sky-500/30 scale-102'
+                : 'bg-white/10 text-stone-200 hover:bg-white/15 border border-white/15 hover:border-sky-400/50 hover:text-white'
             }`}
           >
-            <Droplets className="h-4 w-4 text-sky-400" />
-            <span>Water Tank Guaranteed</span>
-            {activeWaterFilter && <CheckCircle className="h-3.5 w-3.5 ml-1" />}
+            <div className={`p-1 rounded-lg ${activeWaterFilter ? 'bg-sky-600' : 'bg-sky-500/20 text-sky-400'}`}>
+              <Droplets className="h-4 w-4" />
+            </div>
+            <span>Rotto Water Tank Guaranteed</span>
+            {activeWaterFilter && <Check className="h-4 w-4 ml-0.5" />}
           </button>
 
           <button
             type="button"
             onClick={() => onQuickFilter('hasGenerator', !activeGeneratorFilter)}
-            className={`inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs font-semibold transition shadow-sm ${
+            className={`group inline-flex items-center gap-2 rounded-2xl px-4 py-2.5 text-xs font-bold transition-all duration-200 shadow-md ${
               activeGeneratorFilter
-                ? 'bg-amber-500 text-white ring-2 ring-amber-300'
-                : 'bg-white/10 text-white hover:bg-white/20 border border-white/15'
+                ? 'bg-amber-500 text-white ring-2 ring-amber-300 shadow-amber-500/30 scale-102'
+                : 'bg-white/10 text-stone-200 hover:bg-white/15 border border-white/15 hover:border-amber-400/50 hover:text-white'
             }`}
           >
-            <Zap className="h-4 w-4 text-amber-400 fill-amber-400" />
-            <span>Generator Backup</span>
-            {activeGeneratorFilter && <CheckCircle className="h-3.5 w-3.5 ml-1" />}
+            <div className={`p-1 rounded-lg ${activeGeneratorFilter ? 'bg-amber-600' : 'bg-amber-500/20 text-amber-400'}`}>
+              <Zap className="h-4 w-4 fill-current" />
+            </div>
+            <span>Generator Standby Power</span>
+            {activeGeneratorFilter && <Check className="h-4 w-4 ml-0.5" />}
           </button>
 
-          <div className="hidden sm:flex items-center gap-1.5 rounded-xl border border-white/15 bg-white/5 px-3 py-2 text-xs text-stone-300">
+          <div className="hidden sm:flex items-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-4 py-2.5 text-xs font-semibold text-stone-300 backdrop-blur-sm">
             <ShieldCheck className="h-4 w-4 text-emerald-400" />
-            <span>National ID & Title Deed Vetted</span>
+            <span>Landlord Title Deed & ID Vetted</span>
+          </div>
+        </div>
+
+        {/* Live Metrics Ticker Bar */}
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-white/10 pt-6 text-left">
+          <div>
+            <span className="text-[11px] font-semibold text-stone-400 block">Broker Commission</span>
+            <span className="text-xl font-extrabold text-emerald-400 tracking-tight">0 ETB</span>
+            <span className="text-[10px] text-stone-400 block">100% Direct Landlords</span>
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold text-stone-400 block">Water Assurance</span>
+            <span className="text-xl font-extrabold text-sky-400 tracking-tight">Rotto Tanks</span>
+            <span className="text-[10px] text-stone-400 block">Audited for city rationing</span>
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold text-stone-400 block">Payment Escrow</span>
+            <span className="text-xl font-extrabold text-amber-300 tracking-tight">Telebirr & Chapa</span>
+            <span className="text-[10px] text-stone-400 block">Secure holding deposit</span>
+          </div>
+          <div>
+            <span className="text-[11px] font-semibold text-stone-400 block">Active Municipal Zones</span>
+            <span className="text-xl font-extrabold text-white tracking-tight">6 Sub-Cities</span>
+            <span className="text-[10px] text-stone-400 block">Bole, Kirkos, Yeka, etc.</span>
           </div>
         </div>
       </div>

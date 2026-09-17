@@ -1,110 +1,119 @@
 import React from 'react';
-import { ShieldCheck, XCircle, CheckCircle2, AlertTriangle, Zap, Droplets, Banknote } from 'lucide-react';
+import { ShieldCheck, XCircle, CheckCircle2, AlertTriangle, Zap, Droplets, Banknote, Sparkles } from 'lucide-react';
 
 export function AddisMarketInfo() {
   return (
-    <section className="mt-16 border-t border-stone-200 bg-white py-12 px-4 sm:px-6 lg:px-8">
+    <section className="mt-20 border-t border-stone-200/80 bg-gradient-to-b from-white to-stone-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800 uppercase tracking-wider">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100/90 border border-emerald-300/60 px-3.5 py-1 text-xs font-extrabold text-emerald-800 uppercase tracking-wider shadow-xs">
+            <Sparkles className="h-3 w-3 text-emerald-600" />
             Why QetaBet?
           </span>
-          <h2 className="mt-3 text-2xl font-black text-stone-900 sm:text-3xl">
+          <h2 className="mt-3 text-2xl font-black text-stone-900 sm:text-4xl tracking-tight">
             Fixing Addis Ababa's Rental Chaos
           </h2>
-          <p className="mt-2 text-sm text-stone-600">
-            Comparing typical Addis renting methods with QetaBet direct verification.
+          <p className="mt-2 text-xs sm:text-sm text-stone-500">
+            Comparing unverified Telegram channels and street brokers with QetaBet's verified platform.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Telegram Channels */}
-          <div className="rounded-2xl border border-rose-200 bg-rose-50/40 p-6 flex flex-col justify-between">
+          <div className="rounded-3xl border border-rose-200/80 bg-rose-50/30 p-7 flex flex-col justify-between shadow-xs transition hover:shadow-md">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-bold text-rose-800 text-sm">Telegram Channels</span>
-                <span className="rounded-full bg-rose-100 p-1 text-rose-600">
+              <div className="flex items-center justify-between mb-5">
+                <span className="font-extrabold text-rose-900 text-sm">Unstructured Telegram Channels</span>
+                <span className="rounded-2xl bg-rose-100 p-2 text-rose-600">
                   <XCircle className="h-5 w-5" />
                 </span>
               </div>
-              <ul className="space-y-3 text-xs text-stone-700">
-                <li className="flex items-start gap-2">
+              <ul className="space-y-3.5 text-xs text-stone-700">
+                <li className="flex items-start gap-2.5">
                   <AlertTriangle className="h-4 w-4 text-rose-500 shrink-0 mt-0.5" />
-                  <span>Unstructured photo spam with zero address or verification</span>
+                  <span>Unstructured photo spam with zero street addresses or ownership proof</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <AlertTriangle className="h-4 w-4 text-rose-500 shrink-0 mt-0.5" />
-                  <span>Fake listings stolen from Pinterest and Airbnb</span>
+                  <span>Stolen images from foreign websites posing as Addis listings</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <AlertTriangle className="h-4 w-4 text-rose-500 shrink-0 mt-0.5" />
-                  <span>Ghost landlords demanding advance Telebirr payments upfront</span>
+                  <span>Anonymous scammers demanding advance Telebirr payments before viewings</span>
                 </li>
               </ul>
             </div>
-            <div className="mt-6 pt-4 border-t border-rose-200/60 text-xs font-semibold text-rose-700">
-              High Risk • Zero Protection
+            <div className="mt-8 pt-4 border-t border-rose-200/60 flex items-center justify-between text-xs font-bold text-rose-700">
+              <span>Security Level</span>
+              <span className="rounded-lg bg-rose-100 px-2 py-0.5 text-[11px]">High Risk • 0% Trust</span>
             </div>
           </div>
 
           {/* Predatory Delalas */}
-          <div className="rounded-2xl border border-amber-200 bg-amber-50/40 p-6 flex flex-col justify-between">
+          <div className="rounded-3xl border border-amber-200/80 bg-amber-50/30 p-7 flex flex-col justify-between shadow-xs transition hover:shadow-md">
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-bold text-amber-900 text-sm">Traditional Street Brokers (ደላላ)</span>
-                <span className="rounded-full bg-amber-100 p-1 text-amber-700">
+              <div className="flex items-center justify-between mb-5">
+                <span className="font-extrabold text-amber-950 text-sm">Street Brokers (ደላላ)</span>
+                <span className="rounded-2xl bg-amber-100 p-2 text-amber-800">
                   <Banknote className="h-5 w-5" />
                 </span>
               </div>
-              <ul className="space-y-3 text-xs text-stone-700">
-                <li className="flex items-start gap-2">
+              <ul className="space-y-3.5 text-xs text-stone-700">
+                <li className="flex items-start gap-2.5">
                   <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                  <span>Extorts a mandatory full 1-month rent commission from you</span>
+                  <span>Forces you to pay a full 1-month rent commission out-of-pocket</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                  <span>Inflates landlord prices artificially to maximize their cut</span>
+                  <span>Artificially marks up landlord prices to inflate their commission cut</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                  <span>Hides water rationing schedule and electricity blackout realities</span>
+                  <span>Conceals water rationing schedules and electricity blackout risks</span>
                 </li>
               </ul>
             </div>
-            <div className="mt-6 pt-4 border-t border-amber-200/60 text-xs font-semibold text-amber-800">
-              Costs 30,000 - 80,000+ ETB in lost fees
+            <div className="mt-8 pt-4 border-t border-amber-200/60 flex items-center justify-between text-xs font-bold text-amber-800">
+              <span>Financial Toll</span>
+              <span className="rounded-lg bg-amber-100 px-2 py-0.5 text-[11px]">30K - 85K+ ETB Fee</span>
             </div>
           </div>
 
-          {/* QetaBet Solution */}
-          <div className="rounded-2xl border-2 border-emerald-500 bg-emerald-50/70 p-6 flex flex-col justify-between shadow-lg relative overflow-hidden">
-            <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">
-              Recommended
+          {/* QetaBet Direct */}
+          <div className="rounded-3xl border-2 border-emerald-500 bg-emerald-50/80 p-7 flex flex-col justify-between shadow-xl shadow-emerald-950/5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-gradient-to-l from-emerald-600 to-teal-600 text-white text-[10px] font-black px-3.5 py-1 rounded-bl-2xl uppercase tracking-wider shadow-sm">
+              Verified Addis Standard
             </div>
             <div>
-              <div className="flex items-center justify-between mb-4">
-                <span className="font-bold text-emerald-950 text-base">QetaBet Direct (ቀጣቤት)</span>
-                <span className="rounded-full bg-emerald-600 p-1 text-white">
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <span className="font-extrabold text-emerald-950 text-base">QetaBet Direct (ቀጣቤት)</span>
+                  <span className="block text-[11px] text-emerald-700 font-medium">Homeowner Verified Network</span>
+                </div>
+                <span className="rounded-2xl bg-emerald-600 p-2 text-white shadow-sm">
                   <CheckCircle2 className="h-5 w-5" />
                 </span>
               </div>
-              <ul className="space-y-3 text-xs text-emerald-950 font-medium">
-                <li className="flex items-start gap-2">
+              <ul className="space-y-3.5 text-xs text-emerald-950 font-medium">
+                <li className="flex items-start gap-2.5">
                   <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span><strong>0% Delala Broker Fee:</strong> Deal directly with the verified homeowner</span>
+                  <span><strong>Zero Delala Commission:</strong> You deal directly with the titleholder</span>
                 </li>
-                <li className="flex items-start gap-2">
+                <li className="flex items-start gap-2.5">
                   <Droplets className="h-4 w-4 text-sky-600 shrink-0 mt-0.5" />
-                  <span><strong>Water Reserve Audited:</strong> Rotto tank capacity and pump verified</span>
+                  <span><strong>Rotto Water Tank Tested:</strong> Reserve tank volume and pump checked</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <Zap className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
-                  <span><strong>Generator Verified:</strong> Standby power for Addis outages</span>
+                <li className="flex items-start gap-2.5">
+                  <Zap className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span><strong>Generator Verified:</strong> Standby power during city load-shedding</span>
                 </li>
               </ul>
             </div>
-            <div className="mt-6 pt-4 border-t border-emerald-200 text-xs font-bold text-emerald-800">
-              Direct Phone & Chat • Telebirr / Chapa Ready
+            <div className="mt-8 pt-4 border-t border-emerald-200/80 flex items-center justify-between text-xs font-black text-emerald-900">
+              <span>Your Cost</span>
+              <span className="rounded-lg bg-emerald-600 px-2.5 py-1 text-[11px] text-white shadow-xs">
+                0% Broker Fee • Telebirr / Chapa Ready
+              </span>
             </div>
           </div>
         </div>

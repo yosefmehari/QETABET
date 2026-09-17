@@ -88,11 +88,20 @@ export function PostListingSection() {
 
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-emerald-600 py-3 text-xs font-bold text-white shadow hover:bg-emerald-700 transition"
+                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 py-3 text-xs font-bold text-white shadow hover:from-emerald-700 hover:to-emerald-800 transition"
                   >
                     <PlusCircle className="h-4 w-4" />
                     <span>Get Free Landlord Verification</span>
                   </button>
+
+                  <div className="pt-2 text-center">
+                    <a
+                      href="/listings/new"
+                      className="inline-block text-xs font-bold text-emerald-700 hover:underline"
+                    >
+                      Or post your full listing online now with photos →
+                    </a>
+                  </div>
 
                   <p className="text-[10px] text-center text-stone-400">
                     By submitting, you agree to direct tenant communication with zero broker fees.

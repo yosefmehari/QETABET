@@ -207,18 +207,18 @@ export function ListingsExplorer({
       />
 
       {/* Sticky Mobile Search & Quick Filter Bar */}
-      <div className="sticky top-16 z-30 border-b border-stone-200/90 bg-white/95 px-4 py-3 backdrop-blur-md shadow-sm sm:px-6 lg:px-8">
+      <div className="sticky top-[67px] z-30 border-b border-stone-200/80 bg-white/90 px-4 py-3 backdrop-blur-xl shadow-xs sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Main search row */}
-          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2.5">
             <div className="relative flex-1">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-700" />
               <input
                 type="text"
-                placeholder="Search sub-city, neighborhood, CMC, Bole, Kazanchis..."
+                placeholder="Search CMC, Bole, Kazanchis, light rail, 2BR..."
                 value={filters.query}
                 onChange={(e) => setFilters((prev) => ({ ...prev, query: e.target.value }))}
-                className="w-full rounded-xl border border-stone-200 bg-stone-50 pl-10 pr-9 py-2.5 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:bg-white focus:outline-none focus:ring-1 focus:ring-emerald-600 transition"
+                className="w-full rounded-2xl border border-stone-200 bg-stone-50/80 pl-11 pr-10 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-inner transition-all"
               />
               {filters.query && (
                 <button
@@ -227,9 +227,9 @@ export function ListingsExplorer({
                     const updated = { ...filters, query: '' };
                     applyFilters(updated);
                   }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-stone-400 hover:bg-stone-200 hover:text-stone-700 transition"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3.5 w-3.5" />
                 </button>
               )}
             </div>
@@ -238,16 +238,16 @@ export function ListingsExplorer({
             <button
               type="button"
               onClick={() => setIsDrawerOpen(true)}
-              className={`relative inline-flex items-center gap-1.5 rounded-xl border px-3.5 py-2.5 text-xs font-bold transition shadow-sm ${
+              className={`relative inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-xs font-bold transition-all shadow-xs ${
                 activeFilterCount > 0
-                  ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                  : 'border-stone-300 bg-white text-stone-700 hover:bg-stone-50'
+                  ? 'border-emerald-600 bg-emerald-50 text-emerald-950 ring-2 ring-emerald-600/20'
+                  : 'border-stone-300/80 bg-white text-stone-700 hover:bg-stone-50 hover:border-stone-400'
               }`}
             >
               <SlidersHorizontal className="h-4 w-4 text-emerald-600" />
               <span className="hidden sm:inline">Filters</span>
               {activeFilterCount > 0 && (
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-extrabold text-white">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-extrabold text-white shadow-xs">
                   {activeFilterCount}
                 </span>
               )}

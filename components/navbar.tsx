@@ -55,6 +55,15 @@ export function Navbar() {
           </a>
 
           <Link
+            href="/admin"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2 text-xs font-bold text-stone-700 hover:bg-stone-100 transition"
+            title="Admin Dashboard"
+          >
+            <Shield className="h-3.5 w-3.5 text-emerald-600" />
+            <span className="hidden sm:inline">Admin</span>
+          </Link>
+
+          <Link
             href="/listings/new"
             className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow-sm hover:bg-emerald-700 transition active:scale-95"
           >

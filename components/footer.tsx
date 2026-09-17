@@ -45,6 +45,11 @@ export function Footer() {
             <li>Telebirr Integrated Escrow</li>
             <li>Chapa (Cards & Local Banks)</li>
             <li>Landlord ID & Title Verification</li>
+            <li>
+              <Link href="/admin" className="text-emerald-400 font-semibold hover:underline">
+                Staff Admin Portal →
+              </Link>
+            </li>
             <li className="pt-2 text-[11px] text-stone-500">
               Addis Ababa, Ethiopia • support@qetabet.et
             </li>

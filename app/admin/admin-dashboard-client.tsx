@@ -110,7 +110,7 @@ export function AdminDashboardClient({
   inquiries,
   payments,
 }: AdminDashboardClientProps) {
-  // Simple passcode gate (joss5501 or admin123)
+  // Simple passcode gate
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('qetabet_admin_auth') === 'true';
@@ -129,14 +129,14 @@ export function AdminDashboardClient({
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passcode === 'joss5501' || passcode === 'admin123') {
+    if (passcode === 'admin123') {
       setIsAuthenticated(true);
       if (typeof window !== 'undefined') {
         localStorage.setItem('qetabet_admin_auth', 'true');
       }
       setAuthError('');
     } else {
-      setAuthError('Invalid passcode. Use "joss5501" or "admin123".');
+      setAuthError('Invalid passcode. Access denied.');
     }
   };
 
@@ -198,7 +198,7 @@ export function AdminDashboardClient({
               <Key className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
               <input
                 type="password"
-                placeholder="Enter Passcode (e.g. joss5501)"
+                placeholder="Enter Passcode"
                 value={passcode}
                 onChange={(e) => setPasscode(e.target.value)}
                 className="w-full rounded-xl border border-stone-300 pl-10 pr-4 py-2.5 text-sm text-stone-900 focus:border-emerald-600 focus:outline-none"
@@ -211,10 +211,6 @@ export function AdminDashboardClient({
             >
               Unlock Admin Dashboard
             </button>
-
-            <div className="pt-2 text-[11px] text-stone-400">
-              Default system passcode: <span className="font-mono font-bold text-stone-600">joss5501</span>
-            </div>
           </form>
         </div>
       </div>

@@ -1,0 +1,178 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  USER
+  LANDLORD
+  ROOMMATE_SEEKER
+  ADMIN
+}
+
+enum ListingType {
+  ENTIRE_APARTMENT
+  PRIVATE_ROOM
+  SHARED_ROOM
+  STUDIO
+  COMMERCIAL
+}
+
+enum FurnishingStatus {
+  UNFURNISHED
+  SEMI_FURNISHED
+  FULLY_FURNISHED
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ListingStatus {
+  ACTIVE
+  RENTED
+  DRAFT
+  EXPIRED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+model User {
+  id              String         @id @default(cuid())
+  phoneNumber     String         @unique
+  fullName        String?
+  email           String?        @unique
+  telegramUserId  String?        @unique
+  role            Role           @default(USER)
+  isPhoneVerified Boolean        @default(false)
+  avatarUrl       String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  listings        Listing[]
+  inquiries       Inquiry[]
+  payments        Payment[]
+
+  @@index([phoneNumber])
+}
+
+model SubCity {
+  id        String          @id @default(cuid())
+  name      String          @unique
+  code      String          @unique
+  locations Neighborhood[]
+}
+
+model Neighborhood {
+  id        String    @id @default(cuid())
+  name      String
+  subCityId String
+  subCity   SubCity   @relation(fields: [subCityId], references: [id], onDelete: Cascade)
+  listings  Listing[]
+
+  @@unique([name, subCityId])
+  @@index([subCityId])
+}
+
+model Listing {
+  id                 String             @id @default(cuid())
+  title              String
+  slug               String             @unique
+  description        String
+  listingType        ListingType        @default(ENTIRE_APARTMENT)
+  status             ListingStatus      @default(ACTIVE)
+  verificationStatus VerificationStatus @default(PENDING)
+
+  monthlyRent        Decimal            @db.Decimal(12, 2)
+  depositMonths      Int                @default(1)
+  isPriceNegotiable  Boolean            @default(false)
+
+  bedrooms           Int                @default(1)
+  bathrooms          Int                @default(1)
+  floorLevel         Int?
+
+  hasWaterReserve    Boolean            @default(true)
+  hasGenerator       Boolean            @default(false)
+  hasParking         Boolean            @default(false)
+  hasWifi            Boolean            @default(false)
+  hasElevator        Boolean            @default(false)
+  furnishing         FurnishingStatus   @default(UNFURNISHED)
+
+  neighborhoodId     String
+  neighborhood       Neighborhood       @relation(fields: [neighborhoodId], references: [id])
+  landmark           String?
+  latitude           Float?
+  longitude          Float?
+
+  userId             String
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  images             ListingImage[]
+  inquiries          Inquiry[]
+  payments           Payment[]
+
+  viewsCount         Int                @default(0)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+  expiresAt          DateTime?
+
+  @@index([neighborhoodId])
+  @@index([monthlyRent])
+  @@index([listingType])
+  @@index([status, verificationStatus])
+}
+
+model ListingImage {
+  id        String   @id @default(cuid())
+  url       String
+  isCover   Boolean  @default(false)
+  order     Int      @default(0)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+
+  @@index([listingId])
+}
+
+model Inquiry {
+  id          String   @id @default(cuid())
+  listingId   String
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  message     String
+  phoneNumber String
+  isArchived  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@index([listingId])
+  @@index([senderId])
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  txRef         String        @unique
+  amount        Decimal       @db.Decimal(12, 2)
+  currency      String        @default("ETB")
+  status        PaymentStatus @default(PENDING)
+  provider      String
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  listingId     String?
+  listing       Listing?      @relation(fields: [listingId], references: [id])
+  rawWebhookLog Json?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([txRef])
+  @@index([userId])
+}

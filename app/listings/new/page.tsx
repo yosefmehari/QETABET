@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { getSubCitiesWithNeighborhoods, createListing } from '@/actions/listings';
 import { ListingType, FurnishingStatus } from '@prisma/client';
+import { useLanguage } from '@/lib/i18n';
 
 interface SubCityItem {
   id: string;
@@ -32,16 +33,17 @@ interface SubCityItem {
 }
 
 const PRESET_ADDIS_PHOTOS = [
-  { label: 'Living Room', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267' },
-  { label: 'Master Bedroom', url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688' },
-  { label: 'Modern Kitchen', url: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1' },
-  { label: 'Bathroom', url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a' },
-  { label: 'Exterior & Compound', url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6' },
-  { label: 'Executive Interior', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c' },
+  { labelEn: 'Living Room', labelAm: 'ሳሎን', url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267' },
+  { labelEn: 'Master Bedroom', labelAm: 'ዋና መኝታ ቤት', url: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688' },
+  { labelEn: 'Modern Kitchen', labelAm: 'ዘመናዊ ማብሰያ ቤት', url: 'https://images.unsplash.com/photo-1556912172-45b7abe8b7e1' },
+  { labelEn: 'Bathroom', labelAm: 'መታጠቢያ ቤት', url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a' },
+  { labelEn: 'Exterior & Compound', labelAm: 'የውጭ ግቢ እና ገጽታ', url: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6' },
+  { labelEn: 'Executive Interior', labelAm: 'የውስጥ ማስዋቢያ', url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c' },
 ];
 
 export default function NewListingPage() {
   const router = useRouter();
+  const { t, language, translateLocation, translateListingType, translateFurnishing } = useLanguage();
   const [subCities, setSubCities] = useState<SubCityItem[]>([]);
   const [loadingSubCities, setLoadingSubCities] = useState(true);
 
@@ -127,7 +129,11 @@ export default function NewListingPage() {
       setCustomPhotoInput('');
       setError('');
     } catch {
-      setError('Please enter a valid image URL (e.g. https://images.unsplash.com/...)');
+      setError(
+        language === 'am'
+          ? 'እባክዎ ትክክለኛ የምስል ማስፈንጠሪያ (URL) ያስገቡ (ለምሳሌ https://images.unsplash.com/...)'
+          : 'Please enter a valid image URL (e.g. https://images.unsplash.com/...)'
+      );
     }
   };
 
@@ -144,12 +150,20 @@ export default function NewListingPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !monthlyRent || !neighborhoodId || !landlordPhone.trim()) {
-      setError('Please fill in all required fields (title, price, neighborhood, phone).');
+      setError(
+        language === 'am'
+          ? 'እባክዎ ሁሉንም አስፈላጊ መረጃዎች (ርዕስ፣ ዋጋ፣ ሰፈር፣ ስልክ) ይሙሉ'
+          : 'Please fill in all required fields (title, price, neighborhood, phone).'
+      );
       return;
     }
 
     if (imageUrls.length === 0) {
-      setError('Please add at least 1 photo for your listing.');
+      setError(
+        language === 'am'
+          ? 'እባክዎ ለቤትዎ ቢያንስ 1 ፎቶ ያስገቡ'
+          : 'Please add at least 1 photo for your listing.'
+      );
       return;
     }
 
@@ -184,7 +198,11 @@ export default function NewListingPage() {
         router.push(`/listings/${res.slug}`);
       }
     } catch {
-      setError('Failed to create listing. Please check your database connection.');
+      setError(
+        language === 'am'
+          ? 'ቤቱን ማስመዝገብ አልተቻለም። እባክዎ እንደገና ይሞክሩ።'
+          : 'Failed to create listing. Please check your database connection.'
+      );
       setIsSubmitting(false);
     }
   };
@@ -198,7 +216,7 @@ export default function NewListingPage() {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-600 hover:text-emerald-700 transition mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          <span>Back to all Addis rentals</span>
+          <span>{t.newListing.backToRentals}</span>
         </Link>
 
         <div className="rounded-3xl border border-stone-200 bg-white p-6 sm:p-10 shadow-xl">
@@ -206,14 +224,14 @@ export default function NewListingPage() {
           <div className="border-b border-stone-100 pb-6 mb-8">
             <div className="flex items-center gap-2">
               <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                Direct Landlord Onboarding • 0% Delala
+                {t.newListing.badge} • 0% Delala
               </span>
             </div>
             <h1 className="mt-3 text-2xl sm:text-3xl font-black text-stone-900">
-              List Your Addis Ababa Property
+              {t.newListing.pageTitle}
             </h1>
             <p className="mt-1 text-xs sm:text-sm text-stone-500">
-              Connect directly with verified renters. Add photos, water tank specs, and backup generator details.
+              {t.newListing.pageSubtitle}
             </p>
           </div>
 
@@ -228,27 +246,29 @@ export default function NewListingPage() {
             {/* Section 1: Basic Info */}
             <div className="space-y-4">
               <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900">
-                1. Property Information
+                {t.newListing.step1Title}
               </h2>
+              <p className="text-xs text-stone-500">{t.newListing.step1Subtitle}</p>
 
               <div>
                 <label className="block text-xs font-bold text-stone-700 mb-1">
-                  Listing Title <span className="text-rose-500">*</span>
+                  {t.newListing.listingTitleLabel} <span className="text-rose-500">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Modern 2BR Apartment in CMC near Light Rail"
+                  placeholder={t.newListing.listingTitlePlaceholder}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm text-stone-900 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
                 />
+                <p className="mt-1 text-[11px] text-stone-400">{t.newListing.listingTitleHint}</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Sub-City (ክፍለ ከተማ) <span className="text-rose-500">*</span>
+                    {t.newListing.subCityLabel} <span className="text-rose-500">*</span>
                   </label>
                   <select
                     value={subCityId}
@@ -257,7 +277,7 @@ export default function NewListingPage() {
                   >
                     {subCities.map((sc) => (
                       <option key={sc.id} value={sc.id}>
-                        {sc.name} ({sc.code})
+                        {translateLocation(sc.name)} ({sc.code})
                       </option>
                     ))}
                   </select>
@@ -265,7 +285,7 @@ export default function NewListingPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Neighborhood / Sefer (ሰፈር) <span className="text-rose-500">*</span>
+                    {t.newListing.neighborhoodLabel} <span className="text-rose-500">*</span>
                   </label>
                   <select
                     value={neighborhoodId}
@@ -274,7 +294,7 @@ export default function NewListingPage() {
                   >
                     {neighborhoods.map((n) => (
                       <option key={n.id} value={n.id}>
-                        {n.name}
+                        {translateLocation(n.name)}
                       </option>
                     ))}
                   </select>
@@ -283,11 +303,11 @@ export default function NewListingPage() {
 
               <div>
                 <label className="block text-xs font-bold text-stone-700 mb-1">
-                  Specific Landmark in Addis
+                  {t.newListing.landmarkLabel}
                 </label>
                 <input
                   type="text"
-                  placeholder="e.g. 100m behind Bole Medhanialem Cathedral, near Light Rail"
+                  placeholder={t.newListing.landmarkPlaceholder}
                   value={landmark}
                   onChange={(e) => setLandmark(e.target.value)}
                   className="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm text-stone-900 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
@@ -296,11 +316,11 @@ export default function NewListingPage() {
 
               <div>
                 <label className="block text-xs font-bold text-stone-700 mb-1">
-                  Property Description
+                  {t.newListing.descriptionLabel}
                 </label>
                 <textarea
                   rows={3}
-                  placeholder="Describe your compound, sunlight, kitchen features, security, etc."
+                  placeholder={t.newListing.descriptionPlaceholder}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-sm text-stone-900 focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
@@ -311,13 +331,14 @@ export default function NewListingPage() {
             {/* Section 2: Pricing & Terms */}
             <div className="space-y-4 pt-4 border-t border-stone-200">
               <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900">
-                2. Price & Terms (ETB)
+                {t.newListing.step3Title}
               </h2>
+              <p className="text-xs text-stone-500">{t.newListing.step3Subtitle}</p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Monthly Rent (ETB) <span className="text-rose-500">*</span>
+                    {t.newListing.monthlyRentLabel} <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="number"
@@ -331,17 +352,18 @@ export default function NewListingPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Deposit (Months)
+                    {t.newListing.depositLabel}
                   </label>
                   <select
                     value={depositMonths}
                     onChange={(e) => setDepositMonths(Number(e.target.value))}
                     className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm font-medium text-stone-900 focus:border-emerald-600 focus:outline-none"
                   >
-                    <option value={1}>1 Month Deposit</option>
-                    <option value={2}>2 Months Deposit</option>
-                    <option value={3}>3 Months Deposit</option>
-                    <option value={6}>6 Months Deposit</option>
+                    {[1, 2, 3, 6].map((m) => (
+                      <option key={m} value={m}>
+                        {m} {language === 'am' ? 'ወር ማስያዣ' : m === 1 ? 'Month Deposit' : 'Months Deposit'}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -353,7 +375,7 @@ export default function NewListingPage() {
                       onChange={(e) => setIsPriceNegotiable(e.target.checked)}
                       className="h-4 w-4 rounded border-stone-300 text-emerald-600 focus:ring-emerald-500"
                     />
-                    <span>Price is Negotiable</span>
+                    <span>{t.newListing.negotiableCheckbox}</span>
                   </label>
                 </div>
               </div>
@@ -362,30 +384,30 @@ export default function NewListingPage() {
             {/* Section 3: Room Specifications */}
             <div className="space-y-4 pt-4 border-t border-stone-200">
               <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900">
-                3. Rooms & Furnishing
+                {language === 'am' ? '3. ክፍሎች እና እቃዎች' : '3. Rooms & Furnishing'}
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Property Type
+                    {t.newListing.propertyTypeLabel}
                   </label>
                   <select
                     value={listingType}
                     onChange={(e) => setListingType(e.target.value as ListingType)}
                     className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs font-medium text-stone-900 focus:border-emerald-600 focus:outline-none"
                   >
-                    <option value="ENTIRE_APARTMENT">Apartment</option>
-                    <option value="STUDIO">Studio</option>
-                    <option value="PRIVATE_ROOM">Private Room</option>
-                    <option value="SHARED_ROOM">Shared Room</option>
-                    <option value="COMMERCIAL">Commercial</option>
+                    <option value="ENTIRE_APARTMENT">{translateListingType('ENTIRE_APARTMENT')}</option>
+                    <option value="STUDIO">{translateListingType('STUDIO')}</option>
+                    <option value="PRIVATE_ROOM">{translateListingType('PRIVATE_ROOM')}</option>
+                    <option value="SHARED_ROOM">{translateListingType('SHARED_ROOM')}</option>
+                    <option value="COMMERCIAL">{translateListingType('COMMERCIAL')}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Bedrooms
+                    {t.newListing.bedroomsLabel}
                   </label>
                   <input
                     type="number"
@@ -399,7 +421,7 @@ export default function NewListingPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Bathrooms
+                    {t.newListing.bathroomsLabel}
                   </label>
                   <input
                     type="number"
@@ -413,16 +435,16 @@ export default function NewListingPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Furnishing
+                    {t.newListing.furnishingLabel}
                   </label>
                   <select
                     value={furnishing}
                     onChange={(e) => setFurnishing(e.target.value as FurnishingStatus)}
                     className="w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs font-medium text-stone-900 focus:border-emerald-600 focus:outline-none"
                   >
-                    <option value="UNFURNISHED">Unfurnished</option>
-                    <option value="SEMI_FURNISHED">Semi-Furnished</option>
-                    <option value="FULLY_FURNISHED">Fully Furnished</option>
+                    <option value="UNFURNISHED">{translateFurnishing('UNFURNISHED')}</option>
+                    <option value="SEMI_FURNISHED">{translateFurnishing('SEMI_FURNISHED')}</option>
+                    <option value="FULLY_FURNISHED">{translateFurnishing('FULLY_FURNISHED')}</option>
                   </select>
                 </div>
               </div>
@@ -432,10 +454,10 @@ export default function NewListingPage() {
             <div className="space-y-4 pt-4 border-t border-stone-200">
               <div>
                 <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900">
-                  4. Addis Living Infrastructure Checklist
+                  {t.newListing.step4Title}
                 </h2>
                 <p className="text-xs text-stone-500">
-                  These verified amenities attract 4x more serious tenants in Addis Ababa
+                  {t.newListing.step4Subtitle}
                 </p>
               </div>
 
@@ -450,9 +472,9 @@ export default function NewListingPage() {
                   <div>
                     <div className="flex items-center gap-1.5 text-xs font-bold text-stone-900">
                       <Droplets className="h-3.5 w-3.5 text-sky-500" />
-                      <span>Dedicated Water Tank (Rotto)</span>
+                      <span>{t.newListing.waterReserveTitle}</span>
                     </div>
-                    <p className="text-[11px] text-stone-500">Continuous supply during city rationing</p>
+                    <p className="text-[11px] text-stone-500">{t.newListing.waterReserveDesc}</p>
                   </div>
                 </label>
 
@@ -466,9 +488,9 @@ export default function NewListingPage() {
                   <div>
                     <div className="flex items-center gap-1.5 text-xs font-bold text-stone-900">
                       <Zap className="h-3.5 w-3.5 text-amber-500" />
-                      <span>Standby Backup Generator</span>
+                      <span>{t.newListing.generatorTitle}</span>
                     </div>
-                    <p className="text-[11px] text-stone-500">Power during electric outages</p>
+                    <p className="text-[11px] text-stone-500">{t.newListing.generatorDesc}</p>
                   </div>
                 </label>
 
@@ -482,9 +504,9 @@ export default function NewListingPage() {
                   <div>
                     <div className="flex items-center gap-1.5 text-xs font-bold text-stone-900">
                       <Car className="h-3.5 w-3.5 text-emerald-600" />
-                      <span>Gated Compound Parking</span>
+                      <span>{t.newListing.parkingTitle}</span>
                     </div>
-                    <p className="text-[11px] text-stone-500">Dedicated parking spot with security guard</p>
+                    <p className="text-[11px] text-stone-500">{t.newListing.parkingDesc}</p>
                   </div>
                 </label>
 
@@ -498,9 +520,9 @@ export default function NewListingPage() {
                   <div>
                     <div className="flex items-center gap-1.5 text-xs font-bold text-stone-900">
                       <Wifi className="h-3.5 w-3.5 text-purple-600" />
-                      <span>High-Speed WiFi</span>
+                      <span>{t.newListing.wifiTitle}</span>
                     </div>
-                    <p className="text-[11px] text-stone-500">Fiber broadband connected</p>
+                    <p className="text-[11px] text-stone-500">{t.newListing.wifiDesc}</p>
                   </div>
                 </label>
               </div>
@@ -511,12 +533,14 @@ export default function NewListingPage() {
               <div>
                 <div className="flex items-center justify-between">
                   <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900">
-                    5. Property Photos ({imageUrls.length})
+                    {t.newListing.step5Title} ({imageUrls.length})
                   </h2>
-                  <span className="text-xs text-stone-500">The first photo is your cover image</span>
+                  <span className="text-xs text-stone-500">
+                    {language === 'am' ? 'የመጀመሪያው ፎቶ ዋናው የሽፋን ፎቶ ነው' : 'The first photo is your cover image'}
+                  </span>
                 </div>
                 <p className="text-xs text-stone-500 mt-0.5">
-                  Click preset high-resolution photos or paste your own image URLs.
+                  {t.newListing.step5Subtitle}
                 </p>
               </div>
 
@@ -527,7 +551,7 @@ export default function NewListingPage() {
                     <Image src={url} alt={`Listing photo ${idx + 1}`} fill unoptimized className="object-cover" />
                     {idx === 0 && (
                       <span className="absolute top-1.5 left-1.5 rounded-md bg-emerald-600 px-1.5 py-0.5 text-[9px] font-bold text-white shadow">
-                        Cover Photo
+                        {language === 'am' ? 'ዋና ፎቶ' : 'Cover Photo'}
                       </span>
                     )}
                     <button
@@ -544,17 +568,17 @@ export default function NewListingPage() {
               {/* Quick preset buttons */}
               <div>
                 <span className="text-[11px] font-bold text-stone-600 uppercase tracking-wider block mb-2">
-                  Add Addis Ababa Sample Photos:
+                  {t.newListing.clickPresetToAdd}
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {PRESET_ADDIS_PHOTOS.map((preset) => (
                     <button
-                      key={preset.label}
+                      key={preset.labelEn}
                       type="button"
                       onClick={() => handleAddPresetPhoto(preset.url)}
                       className="rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-700 hover:bg-emerald-50 hover:text-emerald-800 transition"
                     >
-                      + {preset.label}
+                      + {language === 'am' ? preset.labelAm : preset.labelEn}
                     </button>
                   ))}
                 </div>
@@ -564,7 +588,7 @@ export default function NewListingPage() {
               <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="Paste custom image URL (e.g. https://images.unsplash.com/...)"
+                  placeholder={t.newListing.customUrlLabel}
                   value={customPhotoInput}
                   onChange={(e) => setCustomPhotoInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -582,25 +606,28 @@ export default function NewListingPage() {
                   className="inline-flex items-center gap-1 rounded-xl bg-stone-900 px-4 py-2 text-xs font-bold text-white hover:bg-emerald-600 transition active:scale-95 shrink-0"
                 >
                   <Plus className="h-3.5 w-3.5" />
-                  <span>Add URL</span>
+                  <span>{t.newListing.addPhotoBtn}</span>
                 </button>
               </div>
             </div>
 
             {/* Section 6: Landlord Contact */}
             <div className="space-y-4 pt-4 border-t border-stone-200">
-              <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900">
-                6. Landlord Direct Contact
-              </h2>
+              <div>
+                <h2 className="text-sm font-bold uppercase tracking-wider text-stone-900">
+                  {t.newListing.step6Title}
+                </h2>
+                <p className="text-xs text-stone-500">{t.newListing.step6Subtitle}</p>
+              </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Your Full Name
+                    {t.newListing.landlordNameLabel}
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Almaz Bekele"
+                    placeholder={t.newListing.landlordNamePlaceholder}
                     value={landlordName}
                     onChange={(e) => setLandlordName(e.target.value)}
                     className="w-full rounded-xl border border-stone-300 px-3.5 py-2.5 text-sm text-stone-900 focus:border-emerald-600 focus:outline-none"
@@ -609,7 +636,7 @@ export default function NewListingPage() {
 
                 <div>
                   <label className="block text-xs font-bold text-stone-700 mb-1">
-                    Phone Number for Tenant Calls & SMS <span className="text-rose-500">*</span>
+                    {t.newListing.landlordPhoneLabel} <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -629,7 +656,7 @@ export default function NewListingPage() {
                 href="/"
                 className="rounded-xl border border-stone-300 px-5 py-3 text-xs font-bold text-stone-700 hover:bg-stone-100 transition"
               >
-                Cancel
+                {language === 'am' ? 'ተመለስ' : 'Cancel'}
               </Link>
 
               <button
@@ -640,12 +667,12 @@ export default function NewListingPage() {
                 {isSubmitting ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Publishing Verified Listing...</span>
+                    <span>{t.newListing.publishingBtn}</span>
                   </>
                 ) : (
                   <>
                     <ShieldCheck className="h-4 w-4" />
-                    <span>Publish Verified Listing (0% Delala)</span>
+                    <span>{t.newListing.publishBtn}</span>
                   </>
                 )}
               </button>

@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { formatETB } from '@/lib/utils';
 import { ListingType, FurnishingStatus } from '@prisma/client';
+import { useLanguage } from '@/lib/i18n';
 
 export interface ListingCardProps {
   listing: {
@@ -64,6 +65,9 @@ export interface ListingCardProps {
 }
 
 export function ListingCard({ listing }: ListingCardProps) {
+  const { t, formatMoney, translateLocation, translateListingType, translateFurnishing, language } =
+    useLanguage();
+
   const images = listing.images && listing.images.length > 0
     ? listing.images
     : [{ url: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267', isCover: true }];
@@ -83,36 +87,6 @@ export function ListingCard({ listing }: ListingCardProps) {
   };
 
   const currentImageUrl = images[activeImageIndex]?.url || images[0]?.url;
-
-  const formatListingType = (type: ListingType) => {
-    switch (type) {
-      case 'ENTIRE_APARTMENT':
-        return 'Entire Apartment';
-      case 'STUDIO':
-        return 'Studio';
-      case 'PRIVATE_ROOM':
-        return 'Private Room';
-      case 'SHARED_ROOM':
-        return 'Shared Room';
-      case 'COMMERCIAL':
-        return 'Commercial';
-      default:
-        return 'Apartment';
-    }
-  };
-
-  const formatFurnishing = (furn: FurnishingStatus) => {
-    switch (furn) {
-      case 'FULLY_FURNISHED':
-        return 'Furnished';
-      case 'SEMI_FURNISHED':
-        return 'Semi-Furnished';
-      case 'UNFURNISHED':
-        return 'Unfurnished';
-      default:
-        return null;
-    }
-  };
 
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-3xl border border-stone-200/90 bg-white shadow-xs transition-all duration-300 hover:-translate-y-1.5 hover:border-emerald-500/60 hover:shadow-xl hover:shadow-emerald-950/5">
@@ -183,12 +157,12 @@ export function ListingCard({ listing }: ListingCardProps) {
           {/* Verified Badge */}
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600/95 px-2.5 py-1 text-xs font-semibold text-white shadow-md backdrop-blur-sm">
             <ShieldCheck className="h-3.5 w-3.5" />
-            <span>Verified Landlord</span>
+            <span>{t.card.verifiedDirectBadge}</span>
           </span>
 
           {/* Type Badge */}
           <span className="inline-flex items-center rounded-full bg-stone-900/80 px-2.5 py-1 text-xs font-medium text-stone-100 shadow-sm backdrop-blur-sm">
-            {formatListingType(listing.listingType)}
+            {translateListingType(listing.listingType)}
           </span>
         </div>
 
@@ -197,15 +171,15 @@ export function ListingCard({ listing }: ListingCardProps) {
           <div className="rounded-xl bg-white/95 px-3 py-1.5 shadow-lg backdrop-blur-md">
             <div className="flex items-baseline gap-1">
               <span className="text-lg font-bold tracking-tight text-stone-900">
-                {formatETB(listing.monthlyRent)}
+                {formatMoney(listing.monthlyRent)}
               </span>
-              <span className="text-xs font-medium text-stone-500">/ mo</span>
+              <span className="text-xs font-medium text-stone-500">{t.card.perMonth}</span>
             </div>
           </div>
 
           {listing.isPriceNegotiable && (
             <span className="rounded-lg bg-amber-500/95 px-2 py-1 text-[11px] font-semibold text-white shadow">
-              Negotiable
+              {t.card.negotiable}
             </span>
           )}
         </div>
@@ -217,7 +191,7 @@ export function ListingCard({ listing }: ListingCardProps) {
         <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-emerald-700">
           <MapPin className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
           <span className="truncate">
-            {listing.neighborhood.name}, {listing.neighborhood.subCity.name}
+            {translateLocation(listing.neighborhood.name)}, {translateLocation(listing.neighborhood.subCity.name)}
           </span>
         </div>
 
@@ -239,28 +213,28 @@ export function ListingCard({ listing }: ListingCardProps) {
         <div className="mt-3 flex flex-wrap items-center gap-3 border-y border-stone-100 py-2.5 text-xs font-medium text-stone-600">
           <span className="flex items-center gap-1">
             <Bed className="h-3.5 w-3.5 text-stone-400" />
-            {listing.bedrooms} {listing.bedrooms === 1 ? 'Bed' : 'Beds'}
+            {listing.bedrooms} {listing.bedrooms === 1 ? t.card.bed : t.card.beds}
           </span>
           <span className="text-stone-300">•</span>
           <span className="flex items-center gap-1">
             <Bath className="h-3.5 w-3.5 text-stone-400" />
-            {listing.bathrooms} {listing.bathrooms === 1 ? 'Bath' : 'Baths'}
+            {listing.bathrooms} {listing.bathrooms === 1 ? t.card.bath : t.card.baths}
           </span>
           {listing.floorLevel !== null && (
             <>
               <span className="text-stone-300">•</span>
               <span className="flex items-center gap-1">
                 <Layers className="h-3.5 w-3.5 text-stone-400" />
-                Floor {listing.floorLevel}
+                {listing.floorLevel === 0 ? t.card.groundFloor : `${listing.floorLevel} ${t.card.floor}`}
               </span>
             </>
           )}
-          {formatFurnishing(listing.furnishing) && (
+          {translateFurnishing(listing.furnishing) && (
             <>
               <span className="text-stone-300">•</span>
               <span className="flex items-center gap-1 text-stone-700">
                 <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-                {formatFurnishing(listing.furnishing)}
+                {translateFurnishing(listing.furnishing)}
               </span>
             </>
           )}
@@ -274,7 +248,7 @@ export function ListingCard({ listing }: ListingCardProps) {
               className="inline-flex items-center gap-1 rounded-md bg-sky-50 px-2 py-1 text-[11px] font-medium text-sky-700 border border-sky-200/80"
             >
               <Droplets className="h-3 w-3 text-sky-500" />
-              <span>Water Tank</span>
+              <span>{t.card.waterGuaranteed}</span>
             </span>
           )}
 
@@ -284,7 +258,7 @@ export function ListingCard({ listing }: ListingCardProps) {
               className="inline-flex items-center gap-1 rounded-md bg-amber-50 px-2 py-1 text-[11px] font-medium text-amber-800 border border-amber-200/80"
             >
               <Zap className="h-3 w-3 text-amber-500 fill-amber-500" />
-              <span>Generator</span>
+              <span>{t.card.generatorReady}</span>
             </span>
           )}
 
@@ -294,7 +268,7 @@ export function ListingCard({ listing }: ListingCardProps) {
               className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-1 text-[11px] font-medium text-emerald-800 border border-emerald-200/80"
             >
               <Car className="h-3 w-3 text-emerald-600" />
-              <span>Parking</span>
+              <span>{t.card.parkingIncluded}</span>
             </span>
           )}
 
@@ -320,7 +294,7 @@ export function ListingCard({ listing }: ListingCardProps) {
                 {listing.user.fullName || 'Landlord'}
               </p>
               <p className="text-[10px] text-emerald-600 font-medium">
-                Direct Owner • 0% Broker Fee
+                {t.nav.zeroDelala}
               </p>
             </div>
           </div>
@@ -329,7 +303,7 @@ export function ListingCard({ listing }: ListingCardProps) {
             <a
               href={`tel:${listing.user.phoneNumber}`}
               className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-stone-200 bg-white text-stone-700 shadow-sm transition hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700"
-              title={`Call landlord: ${listing.user.phoneNumber}`}
+              title={`${t.card.callDirect}: ${listing.user.phoneNumber}`}
             >
               <Phone className="h-3.5 w-3.5" />
             </a>
@@ -337,7 +311,7 @@ export function ListingCard({ listing }: ListingCardProps) {
               href={`/listings/${listing.slug}`}
               className="inline-flex h-8 items-center gap-1 rounded-lg bg-stone-900 px-2.5 text-xs font-medium text-white shadow transition hover:bg-emerald-600"
             >
-              <span>View</span>
+              <span>{t.card.viewDetails}</span>
               <ArrowUpRight className="h-3 w-3" />
             </Link>
           </div>

@@ -18,6 +18,7 @@ import { FilterDrawer, FilterState } from '@/components/filter-drawer';
 import { getFilteredListings } from '@/actions/listings';
 import { HeroBanner } from '@/components/hero-banner';
 import { ListingType, FurnishingStatus } from '@prisma/client';
+import { useLanguage } from '@/lib/i18n';
 
 export interface ListingItem {
   id: string;
@@ -80,6 +81,7 @@ export function ListingsExplorer({
   subCities,
   totalInitial,
 }: ListingsExplorerProps) {
+  const { t, translateLocation, language } = useLanguage();
   const [listings, setListings] = useState<ListingItem[]>(initialListings);
   const [totalCount, setTotalCount] = useState<number>(totalInitial);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -215,7 +217,7 @@ export function ListingsExplorer({
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-700" />
               <input
                 type="text"
-                placeholder="Search CMC, Bole, Kazanchis, light rail, 2BR..."
+                placeholder={t.explorer.searchPlaceholder}
                 value={filters.query}
                 onChange={(e) => setFilters((prev) => ({ ...prev, query: e.target.value }))}
                 className="w-full rounded-2xl border border-stone-200 bg-stone-50/80 pl-11 pr-10 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:border-emerald-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600/20 shadow-inner transition-all"
@@ -245,7 +247,7 @@ export function ListingsExplorer({
               }`}
             >
               <SlidersHorizontal className="h-4 w-4 text-emerald-600" />
-              <span className="hidden sm:inline">Filters</span>
+              <span className="hidden sm:inline">{t.explorer.filterButton}</span>
               {activeFilterCount > 0 && (
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-[10px] font-extrabold text-white shadow-xs">
                   {activeFilterCount}
@@ -266,7 +268,7 @@ export function ListingsExplorer({
                   : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
               }`}
             >
-              All Addis
+              {t.explorer.allAddis}
             </button>
 
             {/* Sub-Cities */}
@@ -283,7 +285,7 @@ export function ListingsExplorer({
                       : 'bg-stone-100 text-stone-700 hover:bg-stone-200'
                   }`}
                 >
-                  {sc.name}
+                  {translateLocation(sc.name)}
                 </button>
               );
             })}
@@ -301,7 +303,7 @@ export function ListingsExplorer({
               }`}
             >
               <Droplets className="h-3 w-3" />
-              <span>Water Tank</span>
+              <span>{t.explorer.waterTankBadge}</span>
             </button>
 
             <button
@@ -314,7 +316,7 @@ export function ListingsExplorer({
               }`}
             >
               <Zap className="h-3 w-3" />
-              <span>Generator</span>
+              <span>{t.explorer.generatorBadge}</span>
             </button>
 
             <button
@@ -327,7 +329,7 @@ export function ListingsExplorer({
               }`}
             >
               <Car className="h-3 w-3" />
-              <span>Parking</span>
+              <span>{t.explorer.parkingBadge}</span>
             </button>
           </div>
         </div>
@@ -340,31 +342,31 @@ export function ListingsExplorer({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-bold text-stone-900">
-                Verified Addis Homes
+                {t.explorer.showingResults}
               </h2>
               <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
-                {totalCount} {totalCount === 1 ? 'Listing' : 'Listings'}
+                {totalCount} {t.explorer.verifiedProperties}
               </span>
               {isPending && (
-                <span className="text-xs text-stone-400 italic">Updating...</span>
+                <span className="text-xs text-stone-400 italic">...</span>
               )}
             </div>
             <p className="text-xs text-stone-500 mt-0.5">
-              Direct homeowner contact with zero broker commissions
+              {t.card.verifiedDirectBadge} • {t.nav.zeroDelala}
             </p>
           </div>
 
           {/* Sort Dropdown */}
           <div className="flex items-center gap-2 text-xs">
-            <span className="text-stone-500">Sort by:</span>
+            <span className="text-stone-500">{language === 'am' ? 'ቅደም ተከተል:' : 'Sort:'}</span>
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
               className="rounded-lg border border-stone-300 bg-white px-2.5 py-1.5 font-medium text-stone-800 shadow-sm focus:border-emerald-600 focus:outline-none"
             >
-              <option value="newest">Newest Listed</option>
-              <option value="price_asc">Price: Low to High</option>
-              <option value="price_desc">Price: High to Low</option>
+              <option value="newest">{t.explorer.sortNewest}</option>
+              <option value="price_asc">{t.explorer.sortPriceAsc}</option>
+              <option value="price_desc">{t.explorer.sortPriceDesc}</option>
             </select>
           </div>
         </div>
@@ -372,11 +374,11 @@ export function ListingsExplorer({
         {/* Active Filter Chips */}
         {activeFilterCount > 0 && (
           <div className="mb-6 flex flex-wrap items-center gap-2">
-            <span className="text-xs font-medium text-stone-500">Active Filters:</span>
+            <span className="text-xs font-medium text-stone-500">{t.explorer.activeFiltersCount}:</span>
 
             {activeSubCity && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-800">
-                Sub-City: {activeSubCity.name}
+                {t.drawer.subCitySection}: {translateLocation(activeSubCity.name)}
                 <button
                   type="button"
                   onClick={() => handleSubCitySelect('')}
@@ -389,7 +391,7 @@ export function ListingsExplorer({
 
             {activeNeighborhood && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-800">
-                Neighborhood: {activeNeighborhood.name}
+                {t.drawer.neighborhoodSection}: {translateLocation(activeNeighborhood.name)}
                 <button
                   type="button"
                   onClick={() => applyFilters({ ...filters, neighborhoodId: '' })}
@@ -402,7 +404,7 @@ export function ListingsExplorer({
 
             {(filters.minRent || filters.maxRent) && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-800">
-                Rent: {filters.minRent || '0'} - {filters.maxRent || 'Max'} ETB
+                {t.drawer.priceRangeSection}: {filters.minRent || '0'} - {filters.maxRent || 'Max'} {language === 'am' ? 'ብር' : 'ETB'}
                 <button
                   type="button"
                   onClick={() => applyFilters({ ...filters, minRent: '', maxRent: '' })}
@@ -415,7 +417,7 @@ export function ListingsExplorer({
 
             {filters.bedrooms && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-stone-100 px-2.5 py-1 text-xs font-semibold text-stone-800">
-                {filters.bedrooms}+ Bedrooms
+                {filters.bedrooms}+ {t.card.beds}
                 <button
                   type="button"
                   onClick={() => applyFilters({ ...filters, bedrooms: '' })}
@@ -429,7 +431,7 @@ export function ListingsExplorer({
             {filters.hasWaterReserve && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-sky-100 px-2.5 py-1 text-xs font-semibold text-sky-900">
                 <Droplets className="h-3 w-3 text-sky-600" />
-                Water Tank
+                {t.explorer.waterTankBadge}
                 <button
                   type="button"
                   onClick={() => handleToggleAmenity('hasWaterReserve')}
@@ -443,7 +445,7 @@ export function ListingsExplorer({
             {filters.hasGenerator && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-900">
                 <Zap className="h-3 w-3 text-amber-600" />
-                Generator
+                {t.explorer.generatorBadge}
                 <button
                   type="button"
                   onClick={() => handleToggleAmenity('hasGenerator')}
@@ -457,7 +459,7 @@ export function ListingsExplorer({
             {filters.hasParking && (
               <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-900">
                 <Car className="h-3 w-3 text-emerald-600" />
-                Parking
+                {t.explorer.parkingBadge}
                 <button
                   type="button"
                   onClick={() => handleToggleAmenity('hasParking')}
@@ -474,7 +476,7 @@ export function ListingsExplorer({
               className="inline-flex items-center gap-1 text-xs font-semibold text-rose-600 hover:text-rose-800 ml-2"
             >
               <RotateCcw className="h-3 w-3" />
-              <span>Reset All</span>
+              <span>{t.explorer.clearFilters}</span>
             </button>
           </div>
         )}
@@ -493,10 +495,10 @@ export function ListingsExplorer({
               <Building2 className="h-8 w-8" />
             </div>
             <h3 className="mt-4 text-lg font-bold text-stone-900">
-              No Verified Listings Found
+              {t.explorer.noListingsFound}
             </h3>
             <p className="mx-auto mt-2 max-w-sm text-xs text-stone-500">
-              We couldn't find any listings matching your current criteria. Try loosening your rent range or clearing the infrastructure filters.
+              {t.explorer.noListingsDesc}
             </p>
             <button
               type="button"
@@ -504,7 +506,7 @@ export function ListingsExplorer({
               className="mt-5 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow hover:bg-emerald-700 transition"
             >
               <RotateCcw className="h-3.5 w-3.5" />
-              <span>Reset Filters</span>
+              <span>{t.explorer.resetFiltersBtn}</span>
             </button>
           </div>
         )}

@@ -13,6 +13,7 @@ import {
   Check,
 } from 'lucide-react';
 import { ListingType } from '@prisma/client';
+import { useLanguage } from '@/lib/i18n';
 
 export interface FilterState {
   query: string;
@@ -56,6 +57,7 @@ export function FilterDrawer({
   subCities,
   totalResults,
 }: FilterDrawerProps) {
+  const { t, translateLocation, translateListingType, language } = useLanguage();
   const [localFilters, setLocalFilters] = useState<FilterState>(filters);
 
   useEffect(() => {
@@ -131,9 +133,9 @@ export function FilterDrawer({
                 <SlidersHorizontal className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-stone-900">Search Filters</h2>
+                <h2 className="text-lg font-bold text-stone-900">{t.drawer.filterTitle}</h2>
                 <p className="text-xs text-stone-500">
-                  Target verified Addis Ababa homes & amenities
+                  {t.hero.headingSub ? t.nav.brandSubtitle : ''}
                 </p>
               </div>
             </div>
@@ -150,17 +152,17 @@ export function FilterDrawer({
             {/* Addis Ababa Sub-City Selection */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                Sub-City (ክፍለ ከተማ)
+                {t.drawer.subCitySection}
               </label>
               <select
                 value={localFilters.subCityId}
                 onChange={(e) => handleSubCityChange(e.target.value)}
                 className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm font-medium text-stone-900 shadow-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
               >
-                <option value="">All Sub-Cities in Addis Ababa</option>
+                <option value="">{t.drawer.allSubCities}</option>
                 {subCities.map((sc) => (
                   <option key={sc.id} value={sc.id}>
-                    {sc.name} ({sc.code})
+                    {translateLocation(sc.name)} ({sc.code})
                   </option>
                 ))}
               </select>
@@ -170,7 +172,7 @@ export function FilterDrawer({
             {localFilters.subCityId && (
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                  Neighborhood / Sefer (ሰፈር)
+                  {t.drawer.neighborhoodSection}
                 </label>
                 <select
                   value={localFilters.neighborhoodId}
@@ -179,10 +181,12 @@ export function FilterDrawer({
                   }
                   className="w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-sm font-medium text-stone-900 shadow-sm focus:border-emerald-600 focus:outline-none focus:ring-1 focus:ring-emerald-600"
                 >
-                  <option value="">All Neighborhoods in {activeSubCity?.name}</option>
+                  <option value="">
+                    {t.drawer.allNeighborhoods} ({translateLocation(activeSubCity?.name)})
+                  </option>
                   {neighborhoods.map((n) => (
                     <option key={n.id} value={n.id}>
-                      {n.name}
+                      {translateLocation(n.name)}
                     </option>
                   ))}
                 </select>
@@ -193,11 +197,11 @@ export function FilterDrawer({
             <div>
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold uppercase tracking-wider text-stone-700">
-                  Monthly Rent (ETB)
+                  {t.drawer.priceRangeSection}
                 </label>
                 {(localFilters.minRent || localFilters.maxRent) && (
                   <span className="text-xs font-semibold text-emerald-700">
-                    {localFilters.minRent || '0'} - {localFilters.maxRent || 'Any'} ETB
+                    {localFilters.minRent || '0'} - {localFilters.maxRent || 'Max'} {language === 'am' ? 'ብር' : 'ETB'}
                   </span>
                 )}
               </div>
@@ -205,7 +209,7 @@ export function FilterDrawer({
                 <div>
                   <input
                     type="number"
-                    placeholder="Min (e.g. 10000)"
+                    placeholder={t.drawer.minRentPlaceholder}
                     value={localFilters.minRent}
                     onChange={(e) =>
                       setLocalFilters((prev) => ({ ...prev, minRent: e.target.value }))
@@ -216,7 +220,7 @@ export function FilterDrawer({
                 <div>
                   <input
                     type="number"
-                    placeholder="Max (e.g. 60000)"
+                    placeholder={t.drawer.maxRentPlaceholder}
                     value={localFilters.maxRent}
                     onChange={(e) =>
                       setLocalFilters((prev) => ({ ...prev, maxRent: e.target.value }))
@@ -254,24 +258,24 @@ export function FilterDrawer({
             {/* Listing Type */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                Property Type
+                {t.drawer.propertyTypeSection}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { label: 'All Types', value: '' },
-                  { label: 'Entire Apartment', value: 'ENTIRE_APARTMENT' },
-                  { label: 'Studio', value: 'STUDIO' },
-                  { label: 'Private Room', value: 'PRIVATE_ROOM' },
-                  { label: 'Shared Room', value: 'SHARED_ROOM' },
-                  { label: 'Commercial', value: 'COMMERCIAL' },
-                ].map((t) => {
-                  const isSelected = localFilters.listingType === t.value;
+                  { label: t.drawer.allPropertyTypes, value: '' },
+                  { label: t.propertyTypes.ENTIRE_APARTMENT, value: 'ENTIRE_APARTMENT' },
+                  { label: t.propertyTypes.STUDIO, value: 'STUDIO' },
+                  { label: t.propertyTypes.PRIVATE_ROOM, value: 'PRIVATE_ROOM' },
+                  { label: t.propertyTypes.SHARED_ROOM, value: 'SHARED_ROOM' },
+                  { label: t.propertyTypes.COMMERCIAL, value: 'COMMERCIAL' },
+                ].map((item) => {
+                  const isSelected = localFilters.listingType === item.value;
                   return (
                     <button
-                      key={t.value}
+                      key={item.value}
                       type="button"
                       onClick={() =>
-                        setLocalFilters((prev) => ({ ...prev, listingType: t.value }))
+                        setLocalFilters((prev) => ({ ...prev, listingType: item.value }))
                       }
                       className={`flex items-center justify-between rounded-xl border px-3 py-2 text-xs font-medium transition ${
                         isSelected
@@ -279,7 +283,7 @@ export function FilterDrawer({
                           : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'
                       }`}
                     >
-                      <span>{t.label}</span>
+                      <span>{item.label}</span>
                       {isSelected && <Check className="h-3.5 w-3.5 text-emerald-600" />}
                     </button>
                   );
@@ -290,7 +294,7 @@ export function FilterDrawer({
             {/* Bedrooms count */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                Bedrooms
+                {t.drawer.bedroomsSection}
               </label>
               <div className="flex gap-2">
                 {['', '1', '2', '3', '4'].map((bed) => {
@@ -308,7 +312,7 @@ export function FilterDrawer({
                           : 'border-stone-200 bg-white text-stone-700 hover:bg-stone-50'
                       }`}
                     >
-                      {bed === '' ? 'Any' : `${bed}+`}
+                      {bed === '' ? t.drawer.anyBedrooms : `${bed}+`}
                     </button>
                   );
                 })}
@@ -319,10 +323,10 @@ export function FilterDrawer({
             <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-4">
               <div className="mb-3">
                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-900">
-                  Addis Ababa Vital Infrastructure
+                  {t.drawer.vitalAmenitiesSection}
                 </span>
                 <p className="text-[11px] text-emerald-800/80">
-                  Verified power and water resilience to safeguard against city outages
+                  {t.details.vitalAuditSubtitle}
                 </p>
               </div>
 
@@ -343,10 +347,10 @@ export function FilterDrawer({
                   <div className="flex-1">
                     <div className="flex items-center gap-1.5 font-semibold text-xs text-stone-900">
                       <Droplets className="h-3.5 w-3.5 text-sky-500" />
-                      <span>Dedicated Water Reserve Tank (Rotto)</span>
+                      <span>{t.drawer.waterReserveLabel}</span>
                     </div>
                     <p className="text-[11px] text-stone-500">
-                      Guarantees uninterrupted water during weekly city rationing
+                      {t.drawer.waterReserveSub}
                     </p>
                   </div>
                 </label>
@@ -367,10 +371,10 @@ export function FilterDrawer({
                   <div className="flex-1">
                     <div className="flex items-center gap-1.5 font-semibold text-xs text-stone-900">
                       <Zap className="h-3.5 w-3.5 text-amber-500" />
-                      <span>Standby Backup Generator</span>
+                      <span>{t.drawer.generatorLabel}</span>
                     </div>
                     <p className="text-[11px] text-stone-500">
-                      Powers lights, fridge & sockets during Ethiopian Electric Power cuts
+                      {t.drawer.generatorSub}
                     </p>
                   </div>
                 </label>
@@ -391,10 +395,10 @@ export function FilterDrawer({
                   <div className="flex-1">
                     <div className="flex items-center gap-1.5 font-semibold text-xs text-stone-900">
                       <Car className="h-3.5 w-3.5 text-emerald-600" />
-                      <span>Gated Compound Parking</span>
+                      <span>{t.drawer.parkingLabel}</span>
                     </div>
                     <p className="text-[11px] text-stone-500">
-                      Dedicated vehicle parking with security guard
+                      {t.drawer.parkingSub}
                     </p>
                   </div>
                 </label>
@@ -415,8 +419,11 @@ export function FilterDrawer({
                   <div className="flex-1">
                     <div className="flex items-center gap-1.5 font-semibold text-xs text-stone-900">
                       <Wifi className="h-3.5 w-3.5 text-purple-600" />
-                      <span>High-Speed WiFi / Broadband</span>
+                      <span>{t.drawer.wifiLabel}</span>
                     </div>
+                    <p className="text-[11px] text-stone-500">
+                      {t.drawer.wifiSub}
+                    </p>
                   </div>
                 </label>
 
@@ -436,8 +443,11 @@ export function FilterDrawer({
                   <div className="flex-1">
                     <div className="flex items-center gap-1.5 font-semibold text-xs text-stone-900">
                       <Building className="h-3.5 w-3.5 text-stone-600" />
-                      <span>Working Elevator / Lift</span>
+                      <span>{t.drawer.elevatorLabel}</span>
                     </div>
+                    <p className="text-[11px] text-stone-500">
+                      {t.drawer.elevatorSub}
+                    </p>
                   </div>
                 </label>
               </div>
@@ -453,14 +463,14 @@ export function FilterDrawer({
                 className="flex items-center justify-center gap-1.5 rounded-xl border border-stone-300 bg-white px-4 py-2.5 text-xs font-semibold text-stone-700 shadow-sm hover:bg-stone-100 transition"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
-                <span>Reset</span>
+                <span>{t.drawer.clearAll}</span>
               </button>
               <button
                 type="button"
                 onClick={handleApply}
                 className="flex-1 rounded-xl bg-emerald-600 px-4 py-2.5 text-center text-xs font-bold text-white shadow-md hover:bg-emerald-700 transition"
               >
-                Show Results {activeFilterCount > 0 ? `(${activeFilterCount} Active)` : ''}
+                {t.drawer.applyFiltersBtn} {activeFilterCount > 0 ? `(${activeFilterCount})` : ''}
               </button>
             </div>
           </div>

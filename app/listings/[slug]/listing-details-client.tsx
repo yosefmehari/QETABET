@@ -5,11 +5,10 @@ import {
   Phone,
   MessageSquare,
   CreditCard,
-  ShieldCheck,
   Ban,
   CheckCircle,
 } from 'lucide-react';
-import { formatETB } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n';
 import { InquiryModal } from '@/components/inquiry-modal';
 import { PaymentModal } from '@/components/payment-modal';
 
@@ -32,6 +31,7 @@ export function ListingDetailsClient({
   landlordName,
   landlordPhone,
 }: ListingDetailsClientProps) {
+  const { t, language, formatMoney } = useLanguage();
   const [isInquiryOpen, setIsInquiryOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
@@ -45,22 +45,22 @@ export function ListingDetailsClient({
         <div>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl font-black tracking-tight text-stone-900">
-              {formatETB(monthlyRent)}
+              {formatMoney(monthlyRent)}
             </span>
-            <span className="text-xs font-semibold text-stone-500">per month</span>
+            <span className="text-xs font-semibold text-stone-500">{t.details.perMonth}</span>
           </div>
 
           <div className="mt-3 flex flex-wrap gap-2 text-xs">
             <span className="rounded-lg bg-stone-100 px-2.5 py-1 text-stone-700 font-semibold border border-stone-200/60">
-              Deposit: {depositMonths} {depositMonths === 1 ? 'month' : 'months'}
+              {language === 'am' ? 'ማስያዣ:' : 'Deposit:'} {depositMonths} {depositMonths === 1 ? t.details.depositMonth : t.details.depositMonths}
             </span>
             {isPriceNegotiable ? (
               <span className="rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-1 text-amber-800 font-bold">
-                Negotiable with Owner
+                {t.details.priceNegotiable}
               </span>
             ) : (
               <span className="rounded-lg bg-stone-100 px-2.5 py-1 text-stone-600 font-medium">
-                Fixed Price
+                {t.details.priceFixed}
               </span>
             )}
           </div>
@@ -72,10 +72,10 @@ export function ListingDetailsClient({
             <div className="p-1 rounded-full bg-emerald-600 text-white">
               <Ban className="h-3.5 w-3.5" />
             </div>
-            <span>You Save {formatETB(brokerSavings)}!</span>
+            <span>{t.details.brokerSavingsTitle} {formatMoney(brokerSavings)}!</span>
           </div>
           <p className="mt-1.5 text-[11px] text-emerald-900/80 leading-relaxed">
-            By renting directly on QetaBet, you bypass the standard 1-month broker fee paid to street delalas.
+            {t.details.brokerSavingsDesc}
           </p>
         </div>
 
@@ -87,7 +87,7 @@ export function ListingDetailsClient({
             className="w-full flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-700 py-3.5 text-xs font-extrabold text-white shadow-md shadow-emerald-700/20 hover:from-emerald-700 hover:to-emerald-800 transition active:scale-98"
           >
             <Phone className="h-4 w-4" />
-            <span>Call Homeowner: {landlordPhone}</span>
+            <span>{t.details.callLandlordBtn}: {landlordPhone}</span>
           </a>
 
           {/* Send Inquiry Form */}
@@ -97,7 +97,7 @@ export function ListingDetailsClient({
             className="w-full flex items-center justify-center gap-2 rounded-2xl border border-stone-300 bg-stone-50/80 py-3.5 text-xs font-bold text-stone-800 hover:bg-stone-100 transition active:scale-98"
           >
             <MessageSquare className="h-4 w-4 text-emerald-700" />
-            <span>Send Direct Message / Schedule Visit</span>
+            <span>{t.details.sendMessageBtn}</span>
           </button>
 
           {/* Reserve / Holding deposit */}
@@ -107,7 +107,7 @@ export function ListingDetailsClient({
             className="w-full flex items-center justify-center gap-2 rounded-2xl border border-sky-300/90 bg-sky-50/70 py-3.5 text-xs font-bold text-sky-900 hover:bg-sky-100 transition active:scale-98 shadow-xs"
           >
             <CreditCard className="h-4 w-4 text-sky-600" />
-            <span>Reserve via Telebirr or Chapa</span>
+            <span>{t.details.reserveDepositBtn}</span>
           </button>
         </div>
 
@@ -115,11 +115,11 @@ export function ListingDetailsClient({
         <div className="pt-2 border-t border-stone-100 space-y-2 text-[11px] text-stone-500">
           <div className="flex items-center gap-1.5">
             <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-            <span>Identity and ownership papers physically inspected</span>
+            <span>{t.details.trustPoint1}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <CheckCircle className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-            <span>No hidden delala fees or unexpected charges</span>
+            <span>{t.details.trustPoint2}</span>
           </div>
         </div>
       </div>

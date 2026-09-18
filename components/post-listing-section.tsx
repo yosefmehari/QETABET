@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import { PlusCircle, ShieldCheck, CheckCircle2, Phone, Check } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export function PostListingSection() {
+  const { t } = useLanguage();
   const [phone, setPhone] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
@@ -23,27 +25,27 @@ export function PostListingSection() {
           <div>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-300 border border-emerald-400/30">
               <ShieldCheck className="h-4 w-4 text-emerald-400" />
-              For Addis Landlords & Homeowners
+              {t.landlordSection.badge}
             </span>
             <h2 className="mt-4 text-2xl sm:text-3xl font-black text-white">
-              Rent Your Property Directly. Keep 100% of the Rent.
+              {t.landlordSection.title}
             </h2>
             <p className="mt-3 text-xs sm:text-sm text-stone-300 leading-relaxed">
-              Tired of unreliable brokers demanding kickbacks or misrepresenting your apartment? List on QetaBet, get verified by our Addis inspection team, and connect with serious, pre-screened tenants directly.
+              {t.landlordSection.subtitle}
             </p>
 
             <ul className="mt-5 space-y-2 text-xs text-stone-200">
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>Zero broker commission (0% Delala)</span>
+                <span>{t.landlordSection.bullet1}</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>Direct Telebirr / Chapa escrow payments</span>
+                <span>{t.landlordSection.bullet2}</span>
               </li>
               <li className="flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>Water tank & power backup badge verification</span>
+                <span>{t.landlordSection.bullet3}</span>
               </li>
             </ul>
           </div>
@@ -54,24 +56,24 @@ export function PostListingSection() {
                 <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
                   <Check className="h-6 w-6" />
                 </div>
-                <h3 className="text-base font-bold text-stone-900">Request Received!</h3>
+                <h3 className="text-base font-bold text-stone-900">{t.landlordSection.receivedTitle}</h3>
                 <p className="text-xs text-stone-600">
-                  Our Addis Ababa onboarding specialist will call {phone} within 2 hours to schedule your free photographic & tank verification visit.
+                  {t.landlordSection.receivedDesc} ({phone})
                 </p>
               </div>
             ) : (
               <div>
                 <h3 className="text-base font-bold text-stone-900">
-                  List Your Property in 2 Minutes
+                  {t.landlordSection.formTitle}
                 </h3>
                 <p className="text-xs text-stone-500 mt-1">
-                  Enter your phone number to start direct landlord onboarding.
+                  {t.landlordSection.formSubtitle}
                 </p>
 
                 <form onSubmit={handleSubmit} className="mt-4 space-y-3">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">
-                      Phone Number (Ethiopia)
+                      {t.landlordSection.phoneLabel}
                     </label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
@@ -91,7 +93,7 @@ export function PostListingSection() {
                     className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 py-3 text-xs font-bold text-white shadow hover:from-emerald-700 hover:to-emerald-800 transition"
                   >
                     <PlusCircle className="h-4 w-4" />
-                    <span>Get Free Landlord Verification</span>
+                    <span>{t.landlordSection.submitBtn}</span>
                   </button>
 
                   <div className="pt-2 text-center">
@@ -99,12 +101,12 @@ export function PostListingSection() {
                       href="/listings/new"
                       className="inline-block text-xs font-bold text-emerald-700 hover:underline"
                     >
-                      Or post your full listing online now with photos →
+                      {t.landlordSection.fullListingLink}
                     </a>
                   </div>
 
                   <p className="text-[10px] text-center text-stone-400">
-                    By submitting, you agree to direct tenant communication with zero broker fees.
+                    {t.landlordSection.termsNotice}
                   </p>
                 </form>
               </div>

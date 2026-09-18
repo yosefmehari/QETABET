@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { Camera, Grid } from 'lucide-react';
 import { PhotoGalleryModal } from './photo-gallery-modal';
+import { useLanguage } from '@/lib/i18n';
 
 interface ListingGallerySectionProps {
   title: string;
@@ -11,6 +12,7 @@ interface ListingGallerySectionProps {
 }
 
 export function ListingGallerySection({ title, images }: ListingGallerySectionProps) {
+  const { language } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -64,7 +66,7 @@ export function ListingGallerySection({ title, images }: ListingGallerySectionPr
               {/* Show "+X more" overlay on the 4th sub-photo if more exist */}
               {idx === 3 && displayImages.length > 5 && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/60 text-white font-bold text-sm backdrop-blur-xs">
-                  +{displayImages.length - 5} More Photos
+                  +{displayImages.length - 5} {language === 'am' ? 'ተጨማሪ ፎቶዎች' : 'More Photos'}
                 </div>
               )}
             </div>
@@ -78,7 +80,11 @@ export function ListingGallerySection({ title, images }: ListingGallerySectionPr
           className="absolute bottom-4 right-4 z-10 inline-flex items-center gap-2 rounded-xl bg-white/95 px-3.5 py-2 text-xs font-bold text-stone-900 shadow-lg backdrop-blur-md hover:bg-white hover:text-emerald-700 transition"
         >
           <Camera className="h-4 w-4 text-emerald-600" />
-          <span>Show all {displayImages.length} photos</span>
+          <span>
+            {language === 'am'
+              ? `ሁሉንም ${displayImages.length} ፎቶዎች አሳይ`
+              : `Show all ${displayImages.length} photos`}
+          </span>
         </button>
       </div>
 

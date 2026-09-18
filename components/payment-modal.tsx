@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { X, CreditCard, ShieldCheck, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 import { initiatePaymentMock } from '@/actions/listings';
-import { formatETB } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ export function PaymentModal({
   listingTitle,
   monthlyRent,
 }: PaymentModalProps) {
+  const { t, formatMoney } = useLanguage();
   const [provider, setProvider] = useState<'TELEBIRR' | 'CHAPA'>('TELEBIRR');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
@@ -36,7 +37,7 @@ export function PaymentModal({
   const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phoneNumber || phoneNumber.trim().length < 9) {
-      setError('Please enter your mobile phone number for Telebirr/Chapa OTP.');
+      setError(t.payment.errorPhone);
       return;
     }
     setError('');
@@ -51,7 +52,7 @@ export function PaymentModal({
       });
       setReceipt(res);
     } catch {
-      setError('Payment simulation encountered an issue. Please try again.');
+      setError(t.payment.errorFailed);
     } finally {
       setIsProcessing(false);
     }
@@ -76,40 +77,40 @@ export function PaymentModal({
             </div>
             <div>
               <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                Deposit Secured • 0% Broker Fee
+                {t.payment.successBadge}
               </span>
-              <h3 className="mt-2 text-lg font-bold text-stone-900">Holding Deposit Confirmed!</h3>
+              <h3 className="mt-2 text-lg font-bold text-stone-900">{t.payment.successTitle}</h3>
               <p className="mt-1 text-xs text-stone-500">{listingTitle}</p>
             </div>
 
             <div className="rounded-xl border border-stone-200 bg-stone-50 p-4 text-left space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-stone-500">Transaction Ref:</span>
+                <span className="text-stone-500">{t.payment.txRefLabel}</span>
                 <span className="font-mono font-bold text-stone-900">{receipt.txRef}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone-500">Payment Method:</span>
+                <span className="text-stone-500">{t.payment.methodLabel}</span>
                 <span className="font-bold text-stone-900">{provider}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone-500">Amount Paid:</span>
-                <span className="font-bold text-emerald-700">{formatETB(depositAmount)}</span>
+                <span className="text-stone-500">{t.payment.amountPaidLabel}</span>
+                <span className="font-bold text-emerald-700">{formatMoney(depositAmount)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone-500">Status:</span>
+                <span className="text-stone-500">{t.payment.statusLabel}</span>
                 <span className="font-semibold text-emerald-600 uppercase">{receipt.status}</span>
               </div>
             </div>
 
             <p className="text-[11px] text-stone-500">
-              This property is now reserved for your scheduled viewing. The landlord has been notified via SMS.
+              {t.payment.holdingNotice}
             </p>
 
             <button
               onClick={onClose}
               className="w-full rounded-xl bg-stone-900 py-2.5 text-xs font-bold text-white hover:bg-emerald-600 transition"
             >
-              Done
+              {t.payment.doneBtn}
             </button>
           </div>
         ) : (
@@ -117,20 +118,20 @@ export function PaymentModal({
             <div className="mb-4">
               <div className="flex items-center gap-2">
                 <CreditCard className="h-5 w-5 text-emerald-600" />
-                <h3 className="text-lg font-bold text-stone-900">Secure Direct Deposit</h3>
+                <h3 className="text-lg font-bold text-stone-900">{t.payment.title}</h3>
               </div>
               <p className="text-xs text-stone-500 mt-1">
-                Hold property with zero broker fees. Funds protected in escrow.
+                {t.payment.subtitle}
               </p>
             </div>
 
             <div className="mb-4 rounded-xl bg-stone-50 p-3 border border-stone-200 text-xs flex justify-between items-center">
               <div>
-                <p className="font-semibold text-stone-800">Holding Reservation</p>
-                <p className="text-[11px] text-stone-500">Deducted from 1st month rent</p>
+                <p className="font-semibold text-stone-800">{t.payment.holdingReservation}</p>
+                <p className="text-[11px] text-stone-500">{t.payment.deductedNotice}</p>
               </div>
               <span className="text-base font-extrabold text-stone-900">
-                {formatETB(depositAmount)}
+                {formatMoney(depositAmount)}
               </span>
             </div>
 
@@ -145,7 +146,7 @@ export function PaymentModal({
               {/* Payment Gateway Picker */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-2">
-                  Select Ethiopian Payment Gateway
+                  {t.payment.selectGatewayLabel}
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   {/* Telebirr */}
@@ -159,7 +160,7 @@ export function PaymentModal({
                     }`}
                   >
                     <span className="text-xs font-extrabold text-sky-700">Telebirr (ቴሌብር)</span>
-                    <span className="text-[10px] text-stone-500 mt-0.5">Ethio Telecom</span>
+                    <span className="text-[10px] text-stone-500 mt-0.5">{t.payment.telebirrSub}</span>
                   </button>
 
                   {/* Chapa */}
@@ -173,7 +174,7 @@ export function PaymentModal({
                     }`}
                   >
                     <span className="text-xs font-extrabold text-lime-700">Chapa (ቻፓ)</span>
-                    <span className="text-[10px] text-stone-500 mt-0.5">CBE / Dashen / Awash / Cards</span>
+                    <span className="text-[10px] text-stone-500 mt-0.5">{t.payment.chapaSub}</span>
                   </button>
                 </div>
               </div>
@@ -181,7 +182,7 @@ export function PaymentModal({
               {/* Phone number */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-stone-700 mb-1">
-                  Phone Number for {provider} Checkout
+                  {t.payment.phoneLabel} ({provider})
                 </label>
                 <input
                   type="tel"
@@ -195,7 +196,7 @@ export function PaymentModal({
 
               <div className="flex items-center gap-2 text-[11px] text-stone-500">
                 <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-                <span>Encrypted 256-bit payment. Instant landlord reservation alert.</span>
+                <span>{t.payment.encryptionBadge}</span>
               </div>
 
               <button
@@ -206,10 +207,10 @@ export function PaymentModal({
                 {isProcessing ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span>Authorizing {provider}...</span>
+                    <span>{t.payment.authorizingBtn} {provider}...</span>
                   </>
                 ) : (
-                  <span>Pay {formatETB(depositAmount)} via {provider}</span>
+                  <span>{t.payment.payBtn} {formatMoney(depositAmount)} ({provider})</span>
                 )}
               </button>
             </form>

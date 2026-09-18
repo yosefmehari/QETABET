@@ -34,6 +34,18 @@ const config: Config = {
           light: "#f7fee7",
         }
       },
+      fontFamily: {
+        sans: [
+          "var(--font-sans)",
+          "'Noto Sans Ethiopic'",
+          "Nyala",
+          "'Abyssinica SIL'",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "system-ui",
+          "sans-serif",
+        ],
+      },
     },
   },
   plugins: [],
